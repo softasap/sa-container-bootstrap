@@ -1,0 +1,39 @@
+---
+  - name: SSH | Install openssh-server
+    package: name="openssh-server" state="present"
+
+  - name: SSH | Create /var/run/sshd
+    file: path="/var/run/sshd" state="directory"
+
+  - name: SSH | Create /var/run/sshd
+    file: path="/etc/service/sshd" state="directory"
+
+  - name: SSH | touch /etc/service/sshd/down
+    copy: content="" dest="/etc/service/sshd/down" force="no"
+
+  - name: SSH | Template /etc/service/sshd/run
+    template: src="{{role_dir}}/templates/sshd/sshd.runit.j2" dest="/etc/service/sshd/run" mode="u=rwx,g=rx,o=rx"
+
+  - name: SSH | Template /etc/ssh/sshd_config
+    template: src="{{role_dir}}/templates/sshd/sshd_config.j2" dest="/etc/ssh/sshd_config"
+
+  - name: "SSH | Template re-generating host keys into {{container_init_directory}}"
+    template: src="{{role_dir}}/templates/sshd/regenerate_ssh_host_keys.sh.j2" dest="{{container_init_directory}}/00_regen_ssh_host_keys.sh" mode="u=rwx,g=rx,o=rx"
+
+  - name: SSH | Create /root/.ssh
+    file: path="/root/.ssh" state="directory" mode="700" owner="root" group="root"
+
+  - name: SSH | Create /root/.ssh
+    file: path="/root/.ssh" state="directory" mode="700" owner="root" group="root"
+
+  - name: "SSH | Create {{container_ssh_private_key}}"
+    copy: src="{{container_ssh_private_key}}" dest="/etc/insecure_key" mode="644" owner="root" group="root"
+
+  - name: "SSH | Create {{container_ssh_public_key}}"
+    copy: src="{{container_ssh_public_key}}" dest="/etc/insecure_key.pub" mode="644" owner="root" group="root"
+
+  - name: SSH | Authorize key
+    authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', container_ssh_public_key) }}"  

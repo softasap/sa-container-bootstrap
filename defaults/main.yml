@@ -1,0 +1,16 @@
+---
+# defaults file for sa-container-bootstrap
+role_dir: "{{ role_path }}"
+
+container_python_interpeter: /usr/bin/python #/usr/bin/python3 
+container_init: "phusion-init" # "dumb-init"
+container_init_directory: /etc/my_init.d
+
+option_container_cron: true
+option_container_sshd: true
+option_container_syslog_ng: true
+
+container_ssh_private_key: "{{role_dir}}/files/keys/insecure_key"
+container_ssh_public_key: "{{role_dir}}/files/keys/insecure_key.pub"
+
+dumb_init_version: "1.2.0"

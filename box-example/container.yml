@@ -1,0 +1,28 @@
+version: "2"
+settings:
+  conductor_base: ubuntu:16.04
+  volumes:
+   - temp-space:/tmp   # Used to copy static content between containers
+
+services:
+
+   api:
+     from: ubuntu:16.04
+     container_name: api
+     roles:
+       - {
+           role: "softasap.sa-container-bootstrap"
+         }
+       - {
+           role: "softasap.sa-nginx-container"
+         }
+
+     volumes:
+        - temp-space:/tmp   # Used to copy static content between containers
+     environment:
+        IN_DOCKER: "1"         
+
+volumes:
+  temp-space:
+    docker: {}
+
