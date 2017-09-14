@@ -15,12 +15,13 @@ services:
          }
        - {
            role: "softasap.sa-nginx-container",
-           container_init: "phusion-init"
+           container_init: "phusion-init" # uses runit for services management and upstart.
          }
        - {
            role: "../custom-roles/app-nginx-stub-deploy"
          }
-
+     expose:
+       - '8000'
      volumes:
         - temp-space:/tmp   # Used to copy static content between containers
      environment:
