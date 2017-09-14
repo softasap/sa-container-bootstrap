@@ -1,0 +1,38 @@
+---
+
+  - name: SYSLOG | Install syslog daemon.
+    apt: pkg="syslog-ng-core" state="present"
+
+  - name: SYSLOG | Create /etc/service/syslog-ng
+    file: path="/etc/service/syslog-ng" state="directory"
+
+  - name: SYSLOG | template /etc/service/syslog-ng/run
+    template: src="{{role_dir}}/syslog-ng/syslog-ng.runit.j2" dest="/etc/service/syslog-ng/run" mode="u=rwx,g=rx,o=rx"
+
+  - name: SYSLOG | Create /var/lib/syslog-ng
+    file: path="/var/lib/syslog-ng" state="directory"
+
+  - name: SYSLOG | template /etc/default/syslog-ng
+    template: src="{{role_dir}}/syslog-ng/syslog_ng_default.j2" dest="/etc/default/syslog-ng"
+
+  - name: BOOT | touch /var/log/syslog
+    copy: content="" dest="/var/log/syslog" mode="u=rw,g=r,o="
+
+  - name: SYSLOG | template /etc/syslog-ng/syslog-ng.conf
+    template: src="{{role_dir}}/syslog-ng/syslog-ng.conf.j2" dest="/etc/syslog-ng/syslog-ng.conf"
+
+  - name: SYSLOG | Install syslog to "docker logs" forwarder.
+    file: path="/etc/service/syslog-forwarder" state="directory"  
+
+  - name: SYSLOG | template /etc/service/syslog-ng/run
+    template: src="{{role_dir}}/syslog-ng/syslog-forwarder.runit.j2" dest="/etc/service/syslog-forwarder/run" mode="u=rwx,g=rx,o=rx"
+
+  - name: SYSLOG | Install logrotate.
+    apt: pkg="logrotate" state="present"
+
+  - name: SYSLOG | template /etc/syslog-ng/syslog-ng.conf
+    template: src="{{role_dir}}/syslog-ng/logrotate.conf.j2" dest="/etc/logrotate.conf"
+
+  - name: SYSLOG | template /etc/logrotate.d/syslog-ng
+    template: src="{{role_dir}}/syslog-ng/logrotate_syslogng.j2" dest="/etc/logrotate.d/syslog-ng"
+

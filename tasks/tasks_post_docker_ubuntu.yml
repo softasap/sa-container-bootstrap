@@ -1,0 +1,17 @@
+---
+
+  - name: CLEANUP | apt-get clean
+    shell: apt-get clean
+
+  - name: CLEANUP | rm -rf /tmp/* /var/tmp/*
+    shell: rm -rf /tmp/* /var/tmp/*
+    ignore_errors: true
+
+  - name: CLEANUP | rm -rf /var/lib/apt/lists/*
+    shell: rm -rf /var/lib/apt/lists/*
+    ignore_errors: true    
+
+  - name: CLEANUP | rm -f /etc/ssh/ssh_host_*
+    shell: rm -f /etc/ssh/ssh_host_*
+    ignore_errors: true    
+

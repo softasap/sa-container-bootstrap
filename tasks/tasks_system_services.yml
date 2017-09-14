@@ -1,0 +1,30 @@
+---
+  - name: "SYSTEM SERVICES | Template /sbin/my_init" 
+    template: src="{{role_dir}}/container_init/my_init.j2" dest="/sbin/my_init" mode="u=rwx,g=rx,o=rx"
+
+  - name: "SYSTEM SERVICES | Create init directories" 
+    file: path="{{item}}" state="directory"
+    with_items:
+      - "/etc/my_init.d"
+      - "/etc/my_init.pre_shutdown.d"
+      - "/etc/my_init.post_shutdown.d"
+  
+  - name: "SYSTEM SERVICES | Create env directories" 
+    file: path="{{item}}" state="directory" mode="700"
+    with_items:
+        - "/etc/container_environment"      
+
+  - name: SYSTEM SERVICES | groupadd -g 8377 docker_env
+    shell: groupadd -g 8377 docker_env 
+
+  - name: SYSTEM SERVICES | touch /etc/container_environment.sh
+    copy: content="" dest="/etc/container_environment.sh" group="docker_env"
+
+  - name: SYSTEM SERVICES | touch /etc/container_environment.json
+    copy: content="" dest="/etc/container_environment.json" group="docker_env" mode="640"
+
+  - name: SYSTEM SERVICES | ln -s /etc/container_environment.sh /etc/profile.d/
+    shell: ln -s /etc/container_environment.sh /etc/profile.d/
+
+  - name: SYSTEM SERVICES | Install runit.
+    apt: pkg="runit" state="present"

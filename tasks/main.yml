@@ -1,0 +1,13 @@
+---
+# tasks file for sa-container-bootstrap
+  - include: tasks_pre_docker_ubuntu.yml
+
+  - include: tasks_system_services.yml
+
+  - include: tasks_cron.yml
+    when: option_container_cron
+
+  - include: tasks_sshd.yml
+    when: option_container_sshd
+
+  - include: tasks_post_docker_ubuntu.yml
