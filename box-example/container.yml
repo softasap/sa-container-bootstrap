@@ -14,7 +14,11 @@ services:
            role: "softasap.sa-container-bootstrap"
          }
        - {
-           role: "softasap.sa-nginx-container"
+           role: "softasap.sa-nginx-container",
+           container_init: "phusion-init"
+         }
+       - {
+           role: "../custom-roles/app-nginx-stub-deploy"
          }
 
      volumes:
