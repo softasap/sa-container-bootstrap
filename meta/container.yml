@@ -1,0 +1,4 @@
+  bootstrapped_service:
+    image: sa-container-bootstrap-base:latest
+    command: ['/docker-entrypoint']
+

@@ -10,6 +10,7 @@
 
   - name: SSH | touch /etc/service/sshd/down
     copy: content="" dest="/etc/service/sshd/down" force="no"
+    when: not option_container_sshd_enabled
 
   - name: SSH | Template /etc/service/sshd/run
     template: src="{{role_dir}}/templates/sshd/sshd.runit.j2" dest="/etc/service/sshd/run" mode="u=rwx,g=rx,o=rx"

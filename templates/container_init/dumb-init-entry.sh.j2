@@ -1,6 +1,25 @@
 
 #!/usr/bin/dumb-init /bin/bash
 
+##
+##  --main_command              The main command to run. (default: runit)
+##
+##  --enable-insecure-key       Install the insecure SSH key
+##
+##  --skip-startup-files        Skip running {{container_init_directory}}/* and /etc/rc.local
+##
+##  --skip-runit                Do not run runit services
+##
+##  --no-kill-all-on-exit       Dont kill all processes on the system upon exiting
+##
+##  --quiet                     Dont kill all processes on the system upon exiting
+
+options=(main_command enable-insecure-key skip-startup-files skip-runit no-kill-all-on-exit quiet)
+
+source /easyoptions.sh || exit
+
+echo "Note: no command keys except main_command are supported"
+
 echo "Running any available init scripts:"
 find {{container_init_directory}} -name "*.sh" -print0 | while read -d $'\0' file
 do
@@ -8,6 +27,7 @@ do
   chmod +x $file
   $file
 done
+
 
 $1 $2 $3 $6 $7 $8 $9 $10 $11 $12
 

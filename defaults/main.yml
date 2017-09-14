@@ -5,13 +5,14 @@ role_dir: "{{ role_path }}"
 container_python2_interpeter: /usr/bin/python
 container_python3_interpeter: /usr/bin/python3
 
-container_python_interpeter: "{{container_python2_interpeter}}"
+container_python_interpeter: "{{container_python3_interpeter}}"
 
-container_init: "phusion-init" # "dumb-init"
+container_init: "phusion-init" # "dumb-init" "supervisor-init"
 container_init_directory: /etc/my_init.d
 
 option_container_cron: true
 option_container_sshd: true
+option_container_sshd_enabled: true
 option_container_syslog_ng: true
 
 container_ssh_private_key: "{{role_dir}}/files/keys/insecure_key"
