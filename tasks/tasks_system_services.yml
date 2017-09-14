@@ -1,6 +1,6 @@
 ---
   - name: "SYSTEM SERVICES | Template /sbin/my_init" 
-    template: src="{{role_dir}}/container_init/my_init.j2" dest="/sbin/my_init" mode="u=rwx,g=rx,o=rx"
+    template: src="{{role_dir}}/templates/container_init/my_init.j2" dest="/sbin/my_init" mode="u=rwx,g=rx,o=rx"
 
   - name: "SYSTEM SERVICES | Create init directories" 
     file: path="{{item}}" state="directory"

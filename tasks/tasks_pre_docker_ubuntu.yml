@@ -1,7 +1,7 @@
 ---
 
   - name: BOOT | create /etc/container_environment 
-    file: path="/etc/container_environment" state="present"
+    file: path="/etc/container_environment" state="directory"
 
   - name: BOOT | no > /etc/container_environment/INITRD
     copy: content="no" dest="/etc/container_environment/INITRD" force="no"  

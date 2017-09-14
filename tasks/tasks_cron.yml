@@ -10,7 +10,7 @@
     file: path="/etc/crontab" mode="600"
 
   - name: CRON | Template  /etc/service/cron/run
-    template: src="{{role_dir}}/cron/cron.runit.j2" dest="/etc/service/cron/run" mode="u=rwx,g=rx,o=rx"
+    template: src="{{role_dir}}/templates/cron/cron.runit.j2" dest="/etc/service/cron/run" mode="u=rwx,g=rx,o=rx"
 
   - name: CRON | Cron (ubuntu) dirty patch
     shell: sed -i 's/^\s*session\s\+required\s\+pam_loginuid.so/# &/' /etc/pam.d/cron

@@ -11,4 +11,4 @@
     shell: ln -s /usr/bin/vim.tiny /usr/bin/vim
 
   - name: "SYSTEM SERVICES | Template /sbin/setuser tool runs a command as another user and sets $HOME" 
-    template: src="{{role_dir}}/container_init/set_user.j2" dest="/sbin/setuser" mode="u=rwx,g=rx,o=rx"
+    template: src="{{role_dir}}/templates/container_init/set_user.j2" dest="/sbin/setuser" mode="u=rwx,g=rx,o=rx"

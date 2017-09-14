@@ -3,7 +3,7 @@
 role_dir: "{{ role_path }}"
 
 container_python_interpeter: /usr/bin/python #/usr/bin/python3 
-container_init_system: runit # dumb-init
+container_init_system: my_init # dumb-init
 
 container_init_directory: /etc/my_init.d
 
