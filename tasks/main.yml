@@ -1,5 +1,28 @@
 ---
 # tasks file for sa-container-bootstrap
+  # - block:
+
+  #   - name: Check interpreter exists
+  #     stat: path="{{container_python_interpeter}}"
+  #     register: interpreter_present
+
+  #   - set_fact:
+  #       container_python_interpeter: "{{container_python3_interpeter}}"
+  #     when: interpreter_present.stat.exists == False
+
+  #   - name: Check fallback interpreter exists
+  #     stat: path="{{container_python_interpeter}}"
+  #     register: interpreter2_present
+  #     when: interpreter_present.stat.exists == False      
+
+  #   - assert:
+  #       that:
+  #         - "interpreter2_present.stat.exists == True"
+  #       msg: "For phusion-init either python or python3 needs to be present inside container"
+  #     when: interpreter_present.stat.exists == False        
+
+    when: container_init == "phusion-init"
+
   - include: tasks_pre_docker_ubuntu.yml
 
   - include: tasks_system_services.yml

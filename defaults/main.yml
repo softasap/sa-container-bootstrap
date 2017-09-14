@@ -2,7 +2,11 @@
 # defaults file for sa-container-bootstrap
 role_dir: "{{ role_path }}"
 
-container_python_interpeter: /usr/bin/python #/usr/bin/python3 
+container_python2_interpeter: /usr/bin/python
+container_python3_interpeter: /usr/bin/python3
+
+container_python_interpeter: "{{container_python2_interpeter}}"
+
 container_init: "phusion-init" # "dumb-init"
 container_init_directory: /etc/my_init.d
 
