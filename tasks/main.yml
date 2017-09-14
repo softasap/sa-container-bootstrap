@@ -20,8 +20,8 @@
   #         - "interpreter2_present.stat.exists == True"
   #       msg: "For phusion-init either python or python3 needs to be present inside container"
   #     when: interpreter_present.stat.exists == False        
-
-    when: container_init == "phusion-init"
+  #
+  #  when: container_init == "phusion-init"
 
   - include: tasks_pre_docker_ubuntu.yml
 
