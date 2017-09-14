@@ -1,11 +1,22 @@
 ---
   - name: "SYSTEM SERVICES | Template /sbin/my_init" 
     template: src="{{role_dir}}/templates/container_init/my_init.j2" dest="/sbin/my_init" mode="u=rwx,g=rx,o=rx"
+    when: container_init == "phusion-init"
+
+  - name: SYSTEM SERVICES | Install dumb init
+    get_url:
+      url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_amd64
+      dest: /usr/bin/dumb-init
+      owner: root
+      group: root
+      mode: 0775
+      validate_certs: False
+    when: container_init == "dumb-init"    
 
   - name: "SYSTEM SERVICES | Create init directories" 
     file: path="{{item}}" state="directory"
     with_items:
-      - "/etc/my_init.d"
+      - "{{container_init_directory}}"
       - "/etc/my_init.pre_shutdown.d"
       - "/etc/my_init.post_shutdown.d"
   

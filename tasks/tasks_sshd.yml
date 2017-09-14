@@ -17,8 +17,8 @@
   - name: SSH | Template /etc/ssh/sshd_config
     template: src="{{role_dir}}/templates/sshd/sshd_config.j2" dest="/etc/ssh/sshd_config"
 
-  - name: SSH | Template re-generating host keys into /etc/my_init.d/
-    template: src="{{role_dir}}/templates/sshd/regenerate_ssh_host_keys.sh.j2" dest="/etc/my_init.d/00_regen_ssh_host_keys.sh" mode="u=rwx,g=rx,o=rx"
+  - name: "SSH | Template re-generating host keys into {{container_init_directory}}"
+    template: src="{{role_dir}}/templates/sshd/regenerate_ssh_host_keys.sh.j2" dest="{{container_init_directory}}/00_regen_ssh_host_keys.sh" mode="u=rwx,g=rx,o=rx"
 
   - name: SSH | Create /root/.ssh
     file: path="/root/.ssh" state="directory" mode="700" owner="root" group="root"
