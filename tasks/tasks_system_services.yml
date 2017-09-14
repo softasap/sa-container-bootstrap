@@ -39,3 +39,7 @@
 
   - name: SYSTEM SERVICES | Install runit.
     apt: pkg="runit" state="present"
+
+  - name: "SYSTEM SERVICES | Template entrypoint" 
+    template: src="{{role_dir}}/templates/container_init/{{container_init}}-entry.sh.j2" dest="/docker-entrypoint.sh" mode="u=rwx,g=rx,o=rx"
+

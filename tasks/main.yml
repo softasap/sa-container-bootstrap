@@ -10,4 +10,7 @@
   - include: tasks_sshd.yml
     when: option_container_sshd
 
+  - include: tasks_syslog_ng.yml
+    when: option_container_syslog_ng
+
   - include: tasks_post_docker_ubuntu.yml
