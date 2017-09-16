@@ -7,7 +7,8 @@ container_python3_interpeter: /usr/bin/python3
 
 container_python_interpeter: "{{container_python3_interpeter}}"
 
-container_init: "phusion-init" # "dumb-init" "tini-init" "supervisor-init"
+container_init: "phusion-init" # "dumb-init" "tini-init"
+container_svc: "runit" # "supervisord"
 container_init_directory: /etc/my_init.d
 
 option_container_cron: true
