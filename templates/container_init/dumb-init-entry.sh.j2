@@ -19,7 +19,7 @@ find {{container_init_directory}} -name "*.sh" -print0 | while read -d $'\0' fil
 do
   echo " -- Running $file..."
   chmod +x $file
-  $file
+  eval "$file"
 done
 
 echo "Running RUnit daemon"
