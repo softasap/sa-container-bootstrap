@@ -25,10 +25,6 @@
 
   - include: tasks_pre_docker_ubuntu.yml
 
-  - set_fact:
-      option_install_runit: true
-    when: option_install_runit | default(false) or option_container_cron or option_container_sshd or option_container_syslog_ng
-
   - include: tasks_system_services.yml
 
   - include: tasks_cron.yml

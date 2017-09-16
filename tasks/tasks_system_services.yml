@@ -24,4 +24,6 @@
   - name: SYSTEM SERVICES | ln -s /etc/container_environment.sh /etc/profile.d/
     shell: ln -s /etc/container_environment.sh /etc/profile.d/
 
+  - include: container_svc/{{container_svc}}.yml    
+
   - include: container_init/{{container_init}}.yml

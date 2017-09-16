@@ -1,6 +1,3 @@
 ---
   - name: "SYSTEM SERVICES | Template my_init into /docker-entrypoint"
     template: src="{{role_dir}}/templates/container_init/my_init.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
-
-  - name: SYSTEM SERVICES | Install runit.
-    apt: pkg="runit" state="present"

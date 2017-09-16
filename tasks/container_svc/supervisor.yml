@@ -40,5 +40,5 @@
     tags:
         - supervisord
 
-  - name: SupervisorD | Link supervisord binary to docker-entry point
-    file: path=/docker-entrypoint src=/usr/local/bin/supervisord state=link force=yes
+  - set_fact:
+      container_svc_startup_line: "/usr/local/bin/supervisord"

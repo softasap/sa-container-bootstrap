@@ -9,9 +9,6 @@
       mode: 0775
       validate_certs: False
 
-  - name: SYSTEM SERVICES | Install runit.
-    apt: pkg="runit" state="present"
-
   - name: SYSTEM SERVICES | Install bash based arguments parser
     copy: src="{{role_dir}}/templates/container_init/easyoptions.sh" dest="/easyoptions.sh" mode="u=rwx,g=rx,o=rx"
 

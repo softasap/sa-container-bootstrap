@@ -16,8 +16,6 @@ option_container_sshd: true
 option_container_sshd_enabled: true
 option_container_syslog_ng: true
 
-option_install_runit: false # internal, implied by combination (init,services)
-
 container_ssh_private_key: "{{role_dir}}/files/keys/insecure_key"
 container_ssh_public_key: "{{role_dir}}/files/keys/insecure_key.pub"
 
