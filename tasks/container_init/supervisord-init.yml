@@ -1,0 +1,44 @@
+---
+    # in sync with https://github.com/softasap/sa-supervisord
+  - name: SupervisorD | Check if is present
+    command: test -x /usr/local/bin/supervisord
+    ignore_errors: yes
+    register: supervisord_present
+    tags:
+        - supervisord
+
+  - name: SupervisorD | install package
+    apt: pkg=supervisor state=present
+    tags:
+        - supervisord
+
+  - name: SupervisorD | ensure conf.d directory present
+    file: path="{{supervisor_confd_path}}" state=directory
+    tags:
+      - supervisord
+
+  - name: SupervisorD | Link to old-style config base dir
+    file: path=/etc/supervisord src=/etc/supervisor state=link force=yes
+    when: option_oldstyle_supervisord_compatibility
+    tags:
+        - supervisord
+
+  - name: SupervisorD | Link to old-style conf.d dir
+    file: path=/etc/supervisor/programs src=/etc/supervisor/conf.d state=link force=yes
+    when: option_oldstyle_supervisord_compatibility
+    tags:
+        - supervisord
+
+  - name: SupervisorD | ensure log directory present
+    file: path="/var/log/supervisor" state=directory
+    tags:
+      - supervisord
+
+  - name: SupervisorD | Link to old-style log dir
+    file: path=/var/log/supervisord src=/var/log/supervisor state=link force=yes
+    when: option_oldstyle_supervisord_compatibility
+    tags:
+        - supervisord
+
+  - name: SupervisorD | Link supervisord binary to docker-entry point
+    file: path=/docker-entrypoint src=/usr/local/bin/supervisord state=link force=yes

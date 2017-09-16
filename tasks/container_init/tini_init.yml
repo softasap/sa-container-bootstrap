@@ -1,0 +1,19 @@
+---
+
+  - name: SYSTEM SERVICES | Install tini init
+    get_url:
+      url: https://github.com/krallin/tini/releases/download/v{{tini_version | default('0.16.1')}}/tini
+      dest: /usr/bin/tini
+      owner: root
+      group: root
+      mode: 0775
+      validate_certs: False
+
+  - name: SYSTEM SERVICES | Install runit.
+    apt: pkg="runit" state="present"
+
+  - name: SYSTEM SERVICES | Install bash based arguments parser
+    template: src="{{role_dir}}/templates/container_init/easyoptions.sh.j2" dest="/easyoptions.sh" mode="u=rwx,g=rx,o=rx"
+
+  - name: "SYSTEM SERVICES | Template entrypoint for tini-init into /docker-entrypoint"
+    template: src="{{role_dir}}/templates/container_init/tini-init-entry.sh.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"

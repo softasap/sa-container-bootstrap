@@ -1,0 +1,20 @@
+  - set_fact:
+      dumb_init_architecture: "amd64"
+
+  - name: SYSTEM SERVICES | Install dumb init
+    get_url:
+      url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version | default('1.2.0') }}/dumb-init_{{ dumb_init_version | default('1.2.0') }}_{{dumb_init_architecture}}
+      dest: /usr/bin/dumb-init
+      owner: root
+      group: root
+      mode: 0775
+      validate_certs: False
+
+  - name: SYSTEM SERVICES | Install runit.
+    apt: pkg="runit" state="present"
+
+  - name: SYSTEM SERVICES | Install bash based arguments parser
+    template: src="{{role_dir}}/templates/container_init/easyoptions.sh.j2" dest="/easyoptions.sh" mode="u=rwx,g=rx,o=rx"
+
+  - name: "SYSTEM SERVICES | Template entrypoint for dumb-init into /docker-entrypoint"
+    template: src="{{role_dir}}/templates/container_init/dumb-init-entry.sh.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"

@@ -13,17 +13,21 @@
   #   - name: Check fallback interpreter exists
   #     stat: path="{{container_python_interpeter}}"
   #     register: interpreter2_present
-  #     when: interpreter_present.stat.exists == False      
+  #     when: interpreter_present.stat.exists == False
 
   #   - assert:
   #       that:
   #         - "interpreter2_present.stat.exists == True"
   #       msg: "For phusion-init either python or python3 needs to be present inside container"
-  #     when: interpreter_present.stat.exists == False        
+  #     when: interpreter_present.stat.exists == False
   #
   #  when: container_init == "phusion-init"
 
   - include: tasks_pre_docker_ubuntu.yml
+
+  - set_fact:
+      option_install_runit: true
+    when: option_install_runit | default(false) or option_container_cron or option_container_sshd or option_container_syslog_ng
 
   - include: tasks_system_services.yml
 
