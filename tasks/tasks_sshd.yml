@@ -5,7 +5,7 @@
   - name: SSH | Create /var/run/sshd
     file: path="/var/run/sshd" state="directory"
 
-  - name: SSH | Create /var/run/sshd
+  - name: SSH | Create /etc/service/sshd
     file: path="/etc/service/sshd" state="directory"
 
   - name: SSH | touch /etc/service/sshd/down
@@ -14,6 +14,14 @@
 
   - name: SSH | Template /etc/service/sshd/run
     template: src="{{role_dir}}/templates/sshd/sshd.runit.j2" dest="/etc/service/sshd/run" mode="u=rwx,g=rx,o=rx"
+
+  - block:
+
+    - name: "SSH | Template  {{supervisor_confd_path}}/sshd.conf"
+      template: src="{{role_dir}}/templates/sshd/sshd.supervisord.j2" dest="{{supervisor_confd_path}}/sshd.conf" mode="u=rw,g=r,o=r"
+
+    when: container_svc == "supervisord"
+
 
   - name: SSH | Template /etc/ssh/sshd_config
     template: src="{{role_dir}}/templates/sshd/sshd_config.j2" dest="/etc/ssh/sshd_config"
@@ -37,4 +45,4 @@
     authorized_key:
       user: root
       state: present
-      key: "{{ lookup('file', container_ssh_public_key) }}"  
+      key: "{{ lookup('file', container_ssh_public_key) }}"

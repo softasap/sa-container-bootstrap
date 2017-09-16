@@ -7,7 +7,8 @@ container_python3_interpeter: /usr/bin/python3
 
 container_python_interpeter: "{{container_python3_interpeter}}"
 
-container_init: "phusion-init" # "dumb-init" "supervisor-init"
+container_init: "phusion-init" # "dumb-init" "tini-init"
+container_svc: "runit" # "supervisord"
 container_init_directory: /etc/my_init.d
 
 option_container_cron: true
@@ -18,4 +19,12 @@ option_container_syslog_ng: true
 container_ssh_private_key: "{{role_dir}}/files/keys/insecure_key"
 container_ssh_public_key: "{{role_dir}}/files/keys/insecure_key.pub"
 
+# dumb-init specific settings
 dumb_init_version: "1.2.0"
+
+# supervisor-init specific settings
+option_oldstyle_supervisord_compatibility: false
+supervisor_conf_file: /etc/supervisor/supervisord.conf
+supervisor_confd_path: /etc/supervisor/conf.d
+
+# tini-init specific settings
