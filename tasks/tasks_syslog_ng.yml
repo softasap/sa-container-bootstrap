@@ -9,6 +9,13 @@
   - name: SYSLOG | template /etc/service/syslog-ng/run
     template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.runit.j2" dest="/etc/service/syslog-ng/run" mode="u=rwx,g=rx,o=rx"
 
+  - block:
+
+    - name: "SYSLOG | Template  {{supervisor_confd_path}}/syslog-ng.conf"
+      template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.supervisord.j2" dest="{{supervisor_confd_path}}/syslog-ng.conf" mode="u=rw,g=r,o=r"
+
+    when: container_svc == "supervisord"
+
   - name: SYSLOG | Create /var/lib/syslog-ng
     file: path="/var/lib/syslog-ng" state="directory"
 
@@ -22,10 +29,17 @@
     template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.conf.j2" dest="/etc/syslog-ng/syslog-ng.conf"
 
   - name: SYSLOG | Install syslog to "docker logs" forwarder.
-    file: path="/etc/service/syslog-forwarder" state="directory"  
+    file: path="/etc/service/syslog-forwarder" state="directory"
 
   - name: SYSLOG | template /etc/service/syslog-ng/run
     template: src="{{role_dir}}/templates/syslog-ng/syslog-forwarder.runit.j2" dest="/etc/service/syslog-forwarder/run" mode="u=rwx,g=rx,o=rx"
+
+  - block:
+
+    - name: SYSLOG | Template  {{supervisor_confd_path}}/syslog-forwarder.conf
+      template: src="{{role_dir}}/templates/syslog-ng/syslog-forwarder.supervisord.j2" dest="{{supervisor_confd_path}}/syslog-forwarder.conf" mode="u=rw,g=r,o=r"
+
+    when: container_svc == "supervisord"
 
   - name: SYSLOG | Install logrotate.
     apt: pkg="logrotate" state="present"
@@ -35,4 +49,3 @@
 
   - name: SYSLOG | template /etc/logrotate.d/syslog-ng
     template: src="{{role_dir}}/templates/syslog-ng/logrotate_syslogng.j2" dest="/etc/logrotate.d/syslog-ng"
-

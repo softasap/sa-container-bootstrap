@@ -1,7 +1,7 @@
 ---
     # in sync with https://github.com/softasap/sa-supervisord
   - name: SupervisorD | Check if is present
-    command: test -x /usr/local/bin/supervisord
+    command: test -x /usr/bin/supervisord
     ignore_errors: yes
     register: supervisord_present
     tags:
@@ -41,4 +41,4 @@
         - supervisord
 
   - set_fact:
-      container_svc_startup_line: "/usr/local/bin/supervisord"
+      container_svc_startup_line: "/usr/bin/supervisord --nodaemon --configuration /etc/supervisor/supervisord.conf"
