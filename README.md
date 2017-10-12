@@ -2,9 +2,7 @@ sa-container-bootstrap
 ======================
 
 [![Build Status](https://travis-ci.org/softasap/sa-container-bootstrap.svg?branch=master)](https://travis-ci.org/softasap/sa-container-bootstrap)
-
 [![License: MIT][softasap-license-image] ][softasap-license-url]
-
 [![Ansible-Container friendly][ansible-container-image] ][ansible-container-url]
 
 
