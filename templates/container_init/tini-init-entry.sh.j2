@@ -1,4 +1,4 @@
-#!/usr/bin/dumb-init /bin/bash
+#!/usr/bin/tini /bin/bash
 
 ##
 ##  --main_command              The main command to run. (default: runit)
@@ -23,3 +23,4 @@ done
 
 echo "Running {{container_svc}} daemon"
 eval "{{container_svc_startup_line}}"
+

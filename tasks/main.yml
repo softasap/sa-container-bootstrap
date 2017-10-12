@@ -13,13 +13,13 @@
   #   - name: Check fallback interpreter exists
   #     stat: path="{{container_python_interpeter}}"
   #     register: interpreter2_present
-  #     when: interpreter_present.stat.exists == False      
+  #     when: interpreter_present.stat.exists == False
 
   #   - assert:
   #       that:
   #         - "interpreter2_present.stat.exists == True"
   #       msg: "For phusion-init either python or python3 needs to be present inside container"
-  #     when: interpreter_present.stat.exists == False        
+  #     when: interpreter_present.stat.exists == False
   #
   #  when: container_init == "phusion-init"
 

@@ -29,8 +29,10 @@ Role can be configured using following parameters
 
 # GENERAL CONFIGURATION
 
-# Desired init system:  phusion docker image compatible, using dumb-init, or using supervisord
-container_init: "phusion-init" # "dumb-init" "supervisor-init"
+# Desired init system:  phusion docker image compatible, using dumb-init
+container_init: "phusion-init" # "dumb-init" "tini-init"
+
+container_svc: "runit" # "supervisord"
 
 # Directory where you can place executable files to be executed at startup
 container_init_directory: /etc/my_init.d
@@ -49,7 +51,7 @@ option_container_syslog_ng: true
 
 
 # phusion-init related configuration
-# used by phusion-init, should point real installed python 
+# used by phusion-init, should point real installed python
 container_python_interpeter: "/usr/bin/python3"
 
 
@@ -112,7 +114,7 @@ Container init specifics
 ------------------------
 
 As was mentioned, role supports three initialization options: `phusion-init`, `dumb-init`, `supervisor-init`.
-While `phusion-init` provides the same approach as we see on Phusion docker image, `dumb-init` and `supervisor-init` can be used in simpler 
+While `phusion-init` provides the same approach as we see on Phusion docker image, `dumb-init` and `supervisor-init` can be used in simpler
 services.
 
 `dumb-init` uses simpler init system: https://github.com/Yelp/dumb-init
@@ -145,4 +147,3 @@ Join gitter discussion channel at [Gitter](https://gitter.im/softasap)
 Discover other roles at  http://www.softasap.com/roles/registry_generated.html
 
 visit our blog at http://www.softasap.com/blog/archive.html
-
