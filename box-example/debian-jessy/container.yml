@@ -1,14 +1,14 @@
 version: "2"
 settings:
-  conductor_base: ubuntu:16.04
+  conductor_base: debian:jessie
   volumes:
    - temp-space:/tmp   # Used to copy static content between containers
 
 services:
 
-   api:
-     from: ubuntu:16.04
-     container_name: api
+   api-jessy:
+     from: debian:jessie
+     container_name: api-jessy
      roles:
        - {
            role: "softasap.sa-container-bootstrap"

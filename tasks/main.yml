@@ -23,7 +23,10 @@
   #
   #  when: container_init == "phusion-init"
 
-  - include: tasks_pre_docker_ubuntu.yml
+  - debug: msg="configuring {{ansible_distribution}} / {{ansible_distribution_release}}"
+
+  - include: tasks_pre_docker_debian_ubuntu.yml
+    when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - include: tasks_system_services.yml
 
@@ -36,4 +39,5 @@
   - include: tasks_syslog_ng.yml
     when: option_container_syslog_ng
 
-  - include: tasks_post_docker_ubuntu.yml
+  - include: tasks_post_docker_debian_ubuntu.yml
+    when: ansible_distribution in ["Ubuntu", "Debian"]

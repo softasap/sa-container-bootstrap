@@ -1,0 +1,33 @@
+version: "2"
+settings:
+  conductor_base: ubuntu:16.04
+  volumes:
+   - temp-space:/tmp   # Used to copy static content between containers
+
+services:
+
+   api-xenial:
+     from: ubuntu:16.04
+     container_name: api-xenial
+     roles:
+       - {
+           role: "softasap.sa-container-bootstrap"
+         }
+       - {
+           role: "softasap.sa-nginx-container",
+           container_init: "phusion-init" # uses runit for services management and upstart.
+         }
+       - {
+           role: "../custom-roles/app-nginx-stub-deploy"
+         }
+     expose:
+       - '8000'
+     volumes:
+        - temp-space:/tmp   # Used to copy static content between containers
+     environment:
+        IN_DOCKER: "1"         
+
+volumes:
+  temp-space:
+    docker: {}
+

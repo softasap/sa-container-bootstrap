@@ -3,3 +3,7 @@ box-example/roles/*
 box-example/ansible-deployment/*
 box-example/p-env/*
 box-example/deployables/
+*/**/ansible-deployment/*
+box-example/**/roles/*
+box-example/**/p-env/*
+box-example/**/deployables

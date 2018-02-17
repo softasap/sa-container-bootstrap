@@ -1,16 +1,23 @@
 ---
 
-  - name: BOOT | create /etc/container_environment 
+  - name: BOOT | create /etc/container_environment
     file: path="/etc/container_environment" state="directory"
 
   - name: BOOT | no > /etc/container_environment/INITRD
-    copy: content="no" dest="/etc/container_environment/INITRD" force="no"  
+    copy: content="no" dest="/etc/container_environment/INITRD" force="no"
 
   - name: BOOT | Enable Ubuntu Universe, Multiverse, and deb-src for main.
     shell: |
              sed -i 's/^#\s*\(deb.*main restricted\)$/\1/g' /etc/apt/sources.list  && \
              sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list && \
              sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
+    when: ansible_distribution in ["Ubuntu"]
+
+  - name: Debian Stretch requires dirmngr package to be installed in order to use the apt-key
+    apt:
+      name: dirmngr
+      state: present
+    when: ansible_distribution in ["Ubuntu"] and ansible_distribution_release in ["stretch"]
 
   - name: BOOT | Update packages
     shell: apt-get update
@@ -32,13 +39,13 @@
   - name: BOOT | Patch ischroot (2/2)
     shell: ln -sf /bin/true /usr/bin/ischroot
 
-  - name: BOOT | apt-utils fix for Ubuntu 16.04
+  - name: BOOT | apt-utils fix
     apt: pkg="apt-utils"  state="present"
 
   - name: BOOT | Install HTTPS support for APT.
     apt: pkg="{{item}}"  state="present"
     with_items:
-      - apt-transport-https 
+      - apt-transport-https
       - ca-certificates
 
   - name: BOOT | Install add-apt-repository
@@ -50,16 +57,23 @@
     shell: apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold"
 
   - name: BOOT | Fix locale
-    apt: pkg="language-pack-en"  state="present"  
+    apt: pkg="language-pack-en"  state="present"
+    when: ansible_distribution in ["Ubuntu"]
+
+  - name: BOOT | Fix locale
+    apt: pkg="locales"  state="present"
+    when: ansible_distribution in ["Debian"]
+
 
   - name: BOOT | locale-gen en_US
     shell: locale-gen en_US
 
   - name: BOOT | update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
     shell: update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
+    when: ansible_distribution in ["Ubuntu"]
 
   - name: BOOT | en_US.UTF-8 > /etc/container_environment/LANG
-    copy: content="en_US.UTF-8" dest="/etc/container_environment/LANG" force="no"  
+    copy: content="en_US.UTF-8" dest="/etc/container_environment/LANG" force="no"
 
   - name: BOOT | en_US.UTF-8 > /etc/container_environment/LANG
-    copy: content="en_US.UTF-8" dest="/etc/container_environment/LC_CTYPE" force="no"  
+    copy: content="en_US.UTF-8" dest="/etc/container_environment/LC_CTYPE" force="no"
