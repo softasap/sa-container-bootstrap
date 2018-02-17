@@ -13,6 +13,12 @@
              sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
     when: ansible_distribution in ["Ubuntu"]
 
+  - name: Debian Stretch requires dirmngr package to be installed in order to use the apt-key
+    apt:
+      name: dirmngr
+      state: present
+    when: ansible_distribution in ["Ubuntu"] and ansible_distribution_release in ["stretch"]
+
   - name: BOOT | Update packages
     shell: apt-get update
 
