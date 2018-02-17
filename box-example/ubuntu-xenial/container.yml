@@ -6,9 +6,9 @@ settings:
 
 services:
 
-   api:
+   api-xenial:
      from: ubuntu:16.04
-     container_name: api
+     container_name: api-xenial
      roles:
        - {
            role: "softasap.sa-container-bootstrap"

@@ -6,9 +6,9 @@ settings:
 
 services:
 
-   api:
+   api-jessy:
      from: debian:jessie
-     container_name: api
+     container_name: api-jessy
      roles:
        - {
            role: "softasap.sa-container-bootstrap"
