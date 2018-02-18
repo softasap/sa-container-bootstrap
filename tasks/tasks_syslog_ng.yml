@@ -2,6 +2,11 @@
 
   - name: SYSLOG | Install syslog daemon.
     apt: pkg="syslog-ng-core" state="present"
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - name: SYSLOG | Install syslog daemon.
+    shell: apk --no-cache add syslog-ng
+    when: ansible_distribution in ["Ansible"]
 
   - name: SYSLOG | Create /etc/service/syslog-ng
     file: path="/etc/service/syslog-ng" state="directory"
@@ -19,11 +24,16 @@
   - name: SYSLOG | Create /var/lib/syslog-ng
     file: path="/var/lib/syslog-ng" state="directory"
 
+# TODO support Alpine too
   - name: SYSLOG | template /etc/default/syslog-ng
     template: src="{{role_dir}}/templates/syslog-ng/syslog_ng_default.j2" dest="/etc/default/syslog-ng"
+    when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: BOOT | touch /var/log/syslog
     copy: content="" dest="/var/log/syslog" mode="u=rw,g=r,o="
+
+  - name: SYSLOG | ensure /etc/syslog-ng
+    file: path="/etc/syslog-ng" state="directory"
 
   - name: SYSLOG | template /etc/syslog-ng/syslog-ng.conf
     template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.conf.j2" dest="/etc/syslog-ng/syslog-ng.conf"
@@ -43,6 +53,11 @@
 
   - name: SYSLOG | Install logrotate.
     apt: pkg="logrotate" state="present"
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+  - name: SYSLOG | Install syslog daemon.
+    shell: apk --no-cache add logrotate
+    when: ansible_distribution in ["Ansible"]
 
   - name: SYSLOG | template /etc/syslog-ng/syslog-ng.conf
     template: src="{{role_dir}}/templates/syslog-ng/logrotate.conf.j2" dest="/etc/logrotate.conf"

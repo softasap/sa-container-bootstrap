@@ -2,6 +2,12 @@
 
   - name: SYSTEM SERVICES | groupadd -g 8377 docker_env
     shell: groupadd -g 8377 docker_env
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - name: SYSTEM SERVICES | groupadd -g 8377 docker_env
+    shell: addgroup -g 8377 docker_env
+    when: ansible_distribution in ["Alpine"]
+
 
   - name: "SYSTEM SERVICES | Create init directories"
     file: path="{{item}}" state="directory"
@@ -13,7 +19,7 @@
   - name: "SYSTEM SERVICES | Create env directories"
     file: path="{{item}}" state="directory" mode="700"
     with_items:
-        - "/etc/container_environment"
+        - "{{container_environment_directory}}"
 
   - name: SYSTEM SERVICES | touch /etc/container_environment.sh
     copy: content="" dest="/etc/container_environment.sh" group="docker_env"
@@ -24,6 +30,32 @@
   - name: SYSTEM SERVICES | ln -s /etc/container_environment.sh /etc/profile.d/
     shell: ln -s /etc/container_environment.sh /etc/profile.d/
 
-  - include: container_svc/{{container_svc}}.yml    
+  - name: SYSTEM SERVICES | ln -s /etc/container_environment.sh /etc/profile.d/
+    file: path="{{item}}" group="docker_env" mode="640"
+    with_items:
+      - "/etc/container_environment.sh"
+      - "/etc/container_environment.json"
+
+  - name: SYSTEM SERVICES | load environment from .bashrc
+    shell:  echo ". /etc/container_environment.sh" >> /root/.bashrc
+
+  - block:
+
+    - name: SYSTEM SERVICES | apk --no-cache upgrade
+      shell: apk --no-cache upgrade
+
+    - name: SYSTEM SERVICES | Often used tools
+      shell:  "apk --no-cache add {{item}}"
+      with_items:
+        - "bash@edge"
+        - "psmisc@edge"
+
+    - name: SYSTEM SERVICES | DISTRIB_CODENAME
+      shell:  cat /etc/alpine-release >> /etc/container_environment/DISTRIB_CODENAME
+
+    when: ansible_distribution in ["Alpine"]
+
+
+  - include: container_svc/{{container_svc}}.yml
 
   - include: container_init/{{container_init}}.yml

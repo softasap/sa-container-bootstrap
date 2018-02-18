@@ -1,0 +1,35 @@
+version: "2"
+settings:
+  conductor_base: alpine:3.5
+  volumes:
+   - temp-space:/tmp   # Used to copy static content between containers
+
+services:
+
+   api-alpine:
+     from: python:3-alpine3.6
+     container_name: api-alpine
+     entrypoint: [/docker-entrypoint]
+     roles:
+       - {
+           role: "softasap.sa-container-bootstrap",
+           option_container_syslog_ng: false,
+           option_container_sshd: false
+         }
+#       - {
+#           role: "softasap.sa-nginx-container",
+#           container_init: "phusion-init" # uses runit for services management and upstart.
+#         }
+#       - {
+#           role: "../custom-roles/app-nginx-stub-deploy"
+#         }
+     expose:
+       - '8000'
+     volumes:
+        - temp-space:/tmp   # Used to copy static content between containers
+     environment:
+        IN_DOCKER: "1"
+
+volumes:
+  temp-space:
+    docker: {}

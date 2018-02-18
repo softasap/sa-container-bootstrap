@@ -1,5 +1,11 @@
   - name: SYSTEM SERVICES | Install runit.
     apt: pkg="runit" state="present"
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - name: SYSTEM SERVICES | Install runit.
+    shell: apk --no-cache add runit@edge
+    when: ansible_distribution in ["Alpine"]
+
 
   - set_fact:
       container_svc_startup_line: "/usr/bin/runsvdir -P /etc/service"

@@ -1,0 +1,33 @@
+---
+
+  # TODO: detect alpine version from container to override default if any
+
+  - name: Alpine Detect version
+    shell: cat /etc/alpine-release  | awk 'BEGIN {FS="."}{print $1"."$2}'
+    register: alpine_version
+
+  - set_fact:
+      container_alpine_version: "{{alpine_version.stdout}}"
+
+  - name: Alpine | Debug - repositories before wiping out
+    shell: cat /etc/apk/repositories
+    ignore_errors: true
+
+  - name: Alpine | reset /etc/apk/repositories
+    copy: content="" dest="/etc/apk/repositories"
+
+  - name: Alpine | Populate repositories
+    shell: "echo '@edge {{item}}' >> /etc/apk/repositories"
+    with_items:
+      - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/main"
+      - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/community"
+      - "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main"
+      - "@edgecommunity http://dl-cdn.alpinelinux.org/alpine/edge/community"
+      - "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing"
+
+  - name: Alpine | Update package info if any
+    shell: apk update
+
+  - name: Alpine | Debug - repositories after setup
+    shell: cat /etc/apk/repositories
+    ignore_errors: true
