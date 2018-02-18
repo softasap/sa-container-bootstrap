@@ -1,3 +1,22 @@
 ---
+
+  - name: Check python interpreter
+    shell: "test -x {{container_python_interpeter}}"
+    ignore_errors: true
+    register: pyexists
+
+  - name: Check python interpreter
+    shell: "which python3"
+    when: pyexists | failed
+    register: py3detected
+
+  - set_fact:
+      container_python_interpeter: "{{py3detected.stdout}}"
+    when: pyexists | failed
+
+  - name: Check python interpreter found
+    shell: "test -x {{container_python_interpeter}}"
+    register: pyexists
+
   - name: "SYSTEM SERVICES | Template my_init into /docker-entrypoint"
     template: src="{{role_dir}}/templates/container_init/my_init.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
