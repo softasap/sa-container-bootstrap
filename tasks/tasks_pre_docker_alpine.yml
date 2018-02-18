@@ -21,7 +21,13 @@
     with_items:
       - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/main"
       - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/community"
-#      - "http://dl-cdn.alpinelinux.org/alpine/{{container_alpine_version}}/testing"
+      - "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main"
+      - "@edgecommunity http://dl-cdn.alpinelinux.org/alpine/edge/community"
+      - "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing"
 
   - name: Alpine | Update package info if any
     shell: apk update
+
+  - name: Alpine | Debug - repositories after setup
+    shell: cat /etc/apk/repositories
+    ignore_errors: true

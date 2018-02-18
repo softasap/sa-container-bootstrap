@@ -47,8 +47,8 @@
     - name: SYSTEM SERVICES | Often used tools
       shell:  "apk --no-cache add {{item}}"
       with_items:
-        - "bash"
-        # - "psmisc"
+        - "bash@edge"
+        - "psmisc@edge"
 
     - name: SYSTEM SERVICES | DISTRIB_CODENAME
       shell:  cat /etc/alpine-release >> /etc/container_environment/DISTRIB_CODENAME
