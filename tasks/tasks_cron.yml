@@ -1,16 +1,8 @@
 ---
 
-  - name: CRON | Installing cron
-    package: name="cron" state="present"
-
-  - name: CRON | Creating /etc/crontab
-    file: path="/etc/crontab" mode="600"
-
   - name: CRON | Creating /etc/service/cron
     file: path="/etc/service/cron" state="directory"
-
-  - name: CRON | Template  /etc/service/cron/run
-    template: src="{{role_dir}}/templates/cron/cron.runit.j2" dest="/etc/service/cron/run" mode="u=rwx,g=rx,o=rx"
+    when: container_svc == "runit"
 
   - block:
 
@@ -19,14 +11,49 @@
 
     when: container_svc == "supervisord"
 
-  - name: CRON | Cron (ubuntu) dirty patch
-    shell: sed -i 's/^\s*session\s\+required\s\+pam_loginuid.so/# &/' /etc/pam.d/cron
 
-  - name: CRON | Eliminate N/A items for cron under docker
-    file: path="{{item}}" state="absent"
-    with_items:
-      - /etc/cron.daily/standard
-      - /etc/cron.daily/upstart
-      - /etc/cron.daily/dpkg
-      - /etc/cron.daily/password
-      - /etc/cron.weekly/fstrim
+  - block:
+
+    - name: CRON | Installing cron
+      package: name="cron" state="present"
+
+    - name: CRON | Creating /etc/crontab
+      file: path="/etc/crontab" mode="600"
+
+    - name: CRON | Template  /etc/service/cron/run
+      template: src="{{role_dir}}/templates/cron/cron.runit.j2" dest="/etc/service/cron/run" mode="u=rwx,g=rx,o=rx"
+      when: container_svc == "runit"
+
+    - name: CRON | Cron (ubuntu) dirty patch
+      shell: sed -i 's/^\s*session\s\+required\s\+pam_loginuid.so/# &/' /etc/pam.d/cron
+
+    - name: CRON | Eliminate N/A items for cron under docker
+      file: path="{{item}}" state="absent"
+      with_items:
+        - /etc/cron.daily/standard
+        - /etc/cron.daily/upstart
+        - /etc/cron.daily/dpkg
+        - /etc/cron.daily/password
+        - /etc/cron.weekly/fstrim
+
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - block:
+
+    - name: CRON | touch /etc/crontab
+      shell: touch /etc/crontab
+
+    - name: CRON | Creating /etc/crontab
+      file: path="/etc/crontab" mode="600"
+
+    - name: CRON | Creating /var/log/cron
+      file: path="/var/log/cron" owner="cron" state="directory"
+
+    - name: CRON | Template /var/log/cron/config
+      template: src="{{role_dir}}/templates/cron/cron_log_alpine.j2" dest="/var/log/cron/config" owner="cron"
+
+    - name: CRON | Template  /etc/service/cron/run
+      template: src="{{role_dir}}/templates/cron/cron_alpine.runit.j2" dest="/etc/service/cron/run" mode="u=rwx,g=rx,o=rx"
+      when: container_svc == "runit"
+
+    when: ansible_distribution in ["Alpine"]

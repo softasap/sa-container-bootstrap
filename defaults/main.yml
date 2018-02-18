@@ -10,6 +10,7 @@ container_python_interpeter: "{{container_python3_interpeter}}"
 container_init: "phusion-init" # "dumb-init" "tini-init"
 container_svc: "runit" # "supervisord"
 container_init_directory: /etc/my_init.d
+container_environment_directory: /etc/container_environment
 
 option_container_cron: true
 option_container_sshd: true
@@ -28,3 +29,5 @@ supervisor_conf_file: /etc/supervisor/supervisord.conf
 supervisor_confd_path: /etc/supervisor/conf.d
 
 # tini-init specific settings
+
+container_alpine_version: "v3.5"

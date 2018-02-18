@@ -1,0 +1,13 @@
+---
+
+  # TODO: detect alpine version from container to override default if any
+
+  - name: Alpine | Populate edge repositories
+    shell: "echo '@edge {{item}}' >> /etc/apk/repositories"
+    with_items:
+      - "http://dl-cdn.alpinelinux.org/alpine/{{container_alpine_version}}/main"
+      - "http://dl-cdn.alpinelinux.org/alpine/{{container_alpine_version}}/community"
+#      - "http://dl-cdn.alpinelinux.org/alpine/{{container_alpine_version}}/testing"
+
+  - name: Alpine | Upgrade packages if any
+    shell: apk --no-cache upgrade

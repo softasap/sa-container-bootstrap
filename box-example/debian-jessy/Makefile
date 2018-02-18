@@ -3,7 +3,7 @@ SHELL=/bin/bash
 DOCKER_HELPER := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))/docker_helper.sh
 
 ROLE_VERSION=$(shell cat $(PWD)/../version.txt)
-ROLE_NAME=$(shell . $(DOCKER_HELPER) ; getUpDirLevel2)
+ROLE_NAME=$(shell . $(DOCKER_HELPER) ; getUpDirLevel1)
 
 REGISTRY_HOST=docker.io
 USERNAME=softasap

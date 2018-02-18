@@ -28,6 +28,10 @@
   - include: tasks_pre_docker_debian_ubuntu.yml
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
+  - include: tasks_pre_docker_alpine.yml
+    when: ansible_distribution in ["Alpine"]
+
+
   - include: tasks_system_services.yml
 
   - include: tasks_cron.yml
@@ -41,3 +45,6 @@
 
   - include: tasks_post_docker_debian_ubuntu.yml
     when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - include: tasks_post_docker_alpine.yml
+    when: ansible_distribution in ["Alpine"]

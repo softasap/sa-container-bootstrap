@@ -1,6 +1,12 @@
 ---
   - name: SSH | Install openssh-server
     package: name="openssh-server" state="present"
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - name: SSH | Install openssh-server
+    shell: apk add --update openssh
+    when: ansible_distribution in ["Alpine"]
+
 
   - name: SSH | Create /var/run/sshd
     file: path="/var/run/sshd" state="directory"
