@@ -8,6 +8,8 @@
 
   - set_fact:
       container_alpine_version: "{{alpine_version.stdout}}"
+      runsvdir_binary: "/sbin/runsvdir"
+      sv_binary: "/sbin/sv"
 
   - name: Alpine | Debug - repositories before wiping out
     shell: cat /etc/apk/repositories

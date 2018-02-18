@@ -5,8 +5,13 @@
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SYSLOG | Install syslog daemon.
-    shell: apk --no-cache add syslog-ng
-    when: ansible_distribution in ["Ansible"]
+    shell: apk --no-cache add syslog-ng@edge
+    when: ansible_distribution in ["Alpine"]
+
+  - name: SYSLOG | Install syslog daemon.
+    fail: msg="SYSLOG NOT SUPPORTED YET"
+    when: ansible_distribution in ["Alpine"]
+
 
   - name: SYSLOG | Create /etc/service/syslog-ng
     file: path="/etc/service/syslog-ng" state="directory"
