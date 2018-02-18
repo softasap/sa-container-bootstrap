@@ -4,7 +4,7 @@
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SSH | Install openssh-server
-    shell: apk add --update openssh
+    shell: apk --no-cache add --update openssh
     when: ansible_distribution in ["Alpine"]
 
 

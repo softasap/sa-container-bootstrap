@@ -29,5 +29,3 @@ supervisor_conf_file: /etc/supervisor/supervisord.conf
 supervisor_confd_path: /etc/supervisor/conf.d
 
 # tini-init specific settings
-
-container_alpine_version: "v3.5"
