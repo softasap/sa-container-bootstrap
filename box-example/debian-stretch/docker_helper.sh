@@ -27,6 +27,12 @@ function getVersion() {
 }
 
 
+function getUpDirLevel1() {
+        result=$(_getUpDirLevel1)
+        echo $result
+}
+
+
 function getUpDirLevel2() {
         result=$(_getUpDirLevel2)
         echo $result
