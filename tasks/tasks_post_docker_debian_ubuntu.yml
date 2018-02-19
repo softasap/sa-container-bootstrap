@@ -1,5 +1,8 @@
 ---
 
+  - name: CLEANUP | apt-get -qy autoremove
+    shell: apt-get -qy autoremove
+
   - name: CLEANUP | apt-get clean
     shell: apt-get clean
 
@@ -14,4 +17,5 @@
   - name: CLEANUP | rm -f /etc/ssh/ssh_host_*
     shell: rm -f /etc/ssh/ssh_host_*
     ignore_errors: true    
+
 
