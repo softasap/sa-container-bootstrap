@@ -8,15 +8,37 @@
   - name: Check python interpreter
     shell: "which python3"
     when: pyexists | failed
+    ignore_errors: true
     register: py3detected
 
   - set_fact:
       container_python_interpeter: "{{py3detected.stdout}}"
-    when: pyexists | failed
+    when: pyexists | failed and not py3detected | failed
 
   - name: Check python interpreter found
     shell: "test -x {{container_python_interpeter}}"
-    register: pyexists
+    ignore_errors: true
+    register: pyexists_really
 
   - name: "SYSTEM SERVICES | Template my_init into /docker-entrypoint"
     template: src="{{role_dir}}/templates/container_init/my_init.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
+    when: not pyexists_really | failed
+
+  - block:
+
+    - set_fact:
+        dumb_init_architecture: "amd64"
+
+    - name: SYSTEM SERVICES | FALLBACK phusion emulation via shell script and dumbinit (1/2)
+      get_url:
+        url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version | default('1.2.0') }}/dumb-init_{{ dumb_init_version | default('1.2.0') }}_{{dumb_init_architecture}}
+        dest: "{{bin_dir}}/dumb-init"
+        owner: root
+        group: root
+        mode: 0775
+        validate_certs: False
+
+    - name: "SYSTEM SERVICES | Template my_init_fallback into /docker-entrypoint"
+      template: src="{{role_dir}}/templates/container_init/my_init_fallback.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
+
+    when: pyexists_really | failed

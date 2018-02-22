@@ -3,6 +3,7 @@
   - set_fact:
       runsvdir_binary: "/usr/bin/runsvdir"
       sv_binary: "/usr/bin/sv"
+      bin_dir: "/usr/bin"
 
 
   - name: BOOT | create /etc/container_environment

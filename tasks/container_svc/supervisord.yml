@@ -1,7 +1,7 @@
 ---
     # in sync with https://github.com/softasap/sa-supervisord
   - name: SupervisorD | Check if is present
-    command: test -x /usr/bin/supervisord
+    command: "test -x {{bin_dir}}/supervisord"
     ignore_errors: yes
     register: supervisord_present
     tags:

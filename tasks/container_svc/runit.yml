@@ -8,4 +8,4 @@
 
 
   - set_fact:
-      container_svc_startup_line: "/usr/bin/runsvdir -P /etc/service"
+      container_svc_startup_line: "{{bin_dir}}/runsvdir -P /etc/service"
