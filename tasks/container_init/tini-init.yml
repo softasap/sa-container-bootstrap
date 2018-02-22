@@ -3,7 +3,7 @@
   - name: SYSTEM SERVICES | Install tini init
     get_url:
       url: https://github.com/krallin/tini/releases/download/v{{tini_version | default('0.16.1')}}/tini
-      dest: /usr/bin/tini
+      dest: "{{bin_dir}}/tini"
       owner: root
       group: root
       mode: 0775

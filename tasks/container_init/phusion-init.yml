@@ -32,7 +32,7 @@
     - name: SYSTEM SERVICES | FALLBACK phusion emulation via shell script and dumbinit (1/2)
       get_url:
         url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version | default('1.2.0') }}/dumb-init_{{ dumb_init_version | default('1.2.0') }}_{{dumb_init_architecture}}
-        dest: /usr/bin/dumb-init
+        dest: "{{bin_dir}}/dumb-init"
         owner: root
         group: root
         mode: 0775
