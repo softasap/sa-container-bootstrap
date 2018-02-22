@@ -41,7 +41,4 @@
     - name: "SYSTEM SERVICES | Template my_init_fallback into /docker-entrypoint"
       template: src="{{role_dir}}/templates/container_init/my_init_fallback.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
 
-      when: not pyexists_really | failed
-
-
     when: pyexists_really | failed
