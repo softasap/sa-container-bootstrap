@@ -76,6 +76,7 @@ run_startup_files() {
    echo "Starting pre-service scritps in /etc/my_init.d"
    for script in /etc/my_init.d/*
     do
+     echo "... $script"
      run_command $script
    done
 
