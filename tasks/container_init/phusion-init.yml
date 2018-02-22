@@ -8,11 +8,12 @@
   - name: Check python interpreter
     shell: "which python3"
     when: pyexists | failed
+    ignore_errors: true
     register: py3detected
 
   - set_fact:
       container_python_interpeter: "{{py3detected.stdout}}"
-    when: pyexists | failed
+    when: pyexists | failed and not py3detected | failed
 
   - name: Check python interpreter found
     shell: "test -x {{container_python_interpeter}}"
