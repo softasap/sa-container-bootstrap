@@ -4,7 +4,7 @@
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SSH | Install openssh-server
-    shell: apk --no-cache add --update openssh@edge
+    shell: "apk --no-cache add --update openssh{{alpine_custom_repo_tag}}"
     when: ansible_distribution in ["Alpine"]
 
 
