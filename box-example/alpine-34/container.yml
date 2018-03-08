@@ -7,7 +7,7 @@ settings:
 services:
 
    api-alpine:
-     from: alpine:3.5
+     from: python:3.6.4-alpine3.4
      container_name: api-alpine
      entrypoint: [/docker-entrypoint]
      roles:
