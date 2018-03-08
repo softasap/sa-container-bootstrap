@@ -35,7 +35,7 @@ runsvdir_binary: "/usr/bin/runsvdir"
 sv_binary: "/usr/bin/sv"
 bin_dir: "/usr/bin"
 
-alpine_custom_repo_tag: "@edge"
+alpine_custom_repo_tag: ""
 
 alpine_custom_packages:
   - "bash{{alpine_custom_repo_tag | default('')}}"

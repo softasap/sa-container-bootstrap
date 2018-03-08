@@ -3,7 +3,7 @@
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SYSTEM SERVICES | Install runit.
-    shell: apk --no-cache add runit@edge
+    shell: "apk --no-cache add runit{{alpine_custom_repo_tag}}"
     when: ansible_distribution in ["Alpine"]
 
 

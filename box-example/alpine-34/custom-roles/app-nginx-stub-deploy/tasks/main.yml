@@ -1,0 +1,13 @@
+---
+  - name: Copy fallback default nginx config for demo purposes
+    copy: src="{{role_dir}}/files/conf/demo.conf" dest="/etc/nginx/sites-enabled/demo.conf"
+
+  - copy: src={{ item }} dest=/www/ owner=nginx group=root mode=755
+    with_fileglob:
+      - "/{{role_dir}}/files/www/*"
+
+  - name: RUNIT | Creating /etc/service/nginx
+    file: path="/etc/service/nginx" state="directory"
+
+  - name: RUNIT | Template  /etc/service/nginx/run
+    template: src="{{role_dir}}/templates/nginx/nginx.runit.j2" dest="/etc/service/nginx/run" mode="u=rwx,g=rx,o=rx"

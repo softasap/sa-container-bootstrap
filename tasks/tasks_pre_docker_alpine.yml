@@ -18,15 +18,15 @@
 
   - name: Alpine | reset /etc/apk/repositories
     copy: content="" dest="/etc/apk/repositories"
+    when: container_alpine_version in ["3.4"]
 
-  - name: Alpine | Populate repositories
-    shell: "echo '@edge {{item}}' >> /etc/apk/repositories"
+  - name: Alpine | Populate repositories (3.4)
+    shell: "echo '{{item}}' >> /etc/apk/repositories"
     with_items:
       - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/main"
       - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/community"
-      - "@edge http://dl-cdn.alpinelinux.org/alpine/edge/main"
-      - "@edgecommunity http://dl-cdn.alpinelinux.org/alpine/edge/community"
-      - "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing"
+      - "http://dl-cdn.alpinelinux.org/alpine/edge/community"
+    when: container_alpine_version in ["3.4"]
 
   - name: Alpine | Update package info if any
     shell: apk update

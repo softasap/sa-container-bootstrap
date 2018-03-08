@@ -7,22 +7,22 @@ settings:
 services:
 
    api-alpine:
-     from: alpine:3.5
+     from: python:3.6.3-alpine3.6
      container_name: api-alpine
      entrypoint: [/docker-entrypoint]
      roles:
        - {
            role: "softasap.sa-container-bootstrap",
            option_container_syslog_ng: false,
-           option_container_sshd: true
+           option_container_sshd: false
          }
-       - {
-           role: "softasap.sa-nginx-container",
-           container_init: "phusion-init" # uses runit for services management and upstart.
-         }
-       - {
-           role: "../custom-roles/app-nginx-stub-deploy"
-         }
+#       - {
+#           role: "softasap.sa-nginx-container",
+#           container_init: "phusion-init" # uses runit for services management and upstart.
+#         }
+#       - {
+#           role: "../custom-roles/app-nginx-stub-deploy"
+#         }
      expose:
        - '8000'
      volumes:

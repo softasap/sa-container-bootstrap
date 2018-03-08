@@ -5,7 +5,7 @@
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SYSLOG | Install syslog daemon.
-    shell: apk --no-cache add syslog-ng@edge
+    shell: "apk --no-cache add syslog-ng{{alpine_custom_repo_tag}}"
     when: ansible_distribution in ["Alpine"]
 
   - name: SYSLOG | Install syslog daemon.
