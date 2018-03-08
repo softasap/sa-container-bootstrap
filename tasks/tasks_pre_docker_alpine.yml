@@ -21,7 +21,7 @@
     when: container_alpine_version in ["3.4"]
 
   - name: Alpine | Populate repositories (3.4)
-    shell: "echo '@edge {{item}}' >> /etc/apk/repositories"
+    shell: "echo '{{item}}' >> /etc/apk/repositories"
     with_items:
       - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/main"
       - "http://dl-cdn.alpinelinux.org/alpine/v{{container_alpine_version}}/community"
