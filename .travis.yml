@@ -10,7 +10,7 @@ env:
   - container=alpine-36
   - container=alpine-37
   - container=debian-jessie
-  - container=debian-stretch
+#  - container=debian-stretch
   - container=ubuntu-xenial
 
 # whitelist
