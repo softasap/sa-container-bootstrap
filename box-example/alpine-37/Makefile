@@ -41,7 +41,7 @@ clean:
 	@rm -rf .Python p-env roles
 
 initialize:
-	@init_quick.sh
+	@./init_quick.sh
 
 tag:
 	@docker tag $(ROLE_NAME)-api:latest softasap/sa-container-box-examples:$(ROLE_NAME).api.$(ROLE_VERSION)
