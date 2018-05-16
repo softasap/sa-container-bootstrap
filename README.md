@@ -19,6 +19,19 @@ Third party ideas and libraries used
  - https://github.com/renatosilva/easyoptions
  - https://github.com/phusion/baseimage-docker
 
+
+| Distribution |   BASE IMAGE  | +SSHD       | +CRON       | + syslog ng |
+| ------------ |:-------------:|:-----------:|:-----------:|:-----------:|
+| Alpine 3.4 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| Alpine 3.5 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| Alpine 3.6 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| Alpine 3.7 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| debian-jessie | :white_check_mark: | :white_check_mark:| :white_check_mark:| :white_check_mark:|
+| debian-stretch | :white_check_mark: | :white_check_mark:| :white_check_mark:| :white_check_mark:|
+| ubuntu-xenial | :white_check_mark: | :white_check_mark:| :white_check_mark:| :white_check_mark:|
+
+
+
 Vars
 ----
 

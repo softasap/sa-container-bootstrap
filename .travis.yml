@@ -9,6 +9,9 @@ env:
   - container=alpine-35
   - container=alpine-36
   - container=alpine-37
+  - container=debian-jessie
+  - container=debian-stretch
+  - container=ubuntu-xenial
 
 # whitelist
 branches:
