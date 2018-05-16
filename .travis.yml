@@ -49,13 +49,13 @@ script:
   - cd ../../
   - make build
   - docker images
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
-after_success:
-  - docker images
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - echo docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api:latest ${hub_repository}:${container}.latest"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.latest"
+
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
