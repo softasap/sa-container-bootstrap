@@ -1,48 +1,47 @@
----
 language: python
-python: "2.7"
-
+python: '2.7'
 sudo: required
-
 env:
+  role_name=softasap.sa-container-bootstrap
+  matrix:
   - container=alpine-34
   - container=alpine-35
   - container=alpine-36
   - container=alpine-37
   - container=debian-jessie
-#  - container=debian-stretch
   - container=ubuntu-xenial
-
-# whitelist
+  global:
+  - secure: K+0GF4C2egu7hPvLEoSCWdQz65CUMes2c9QLZTpqVrQ9idTaDPFzMNt1BcqNYsNB1AVbWnsbdybxS7MYuN5rHffS6Z5nZENPVn1E7sWWLqC0rdOAwVKJo1NQ9V0Mt164JnwzsaOQRUcM+zHKoAQSRx7qQn88hyhzVN6YwZ9XOpK6gnKpaoLbAY46Vzrjjd0ldR0ROO3fEpKuarLylAT4mOQLGQESGT7dHGa+NnsaRRYyhDR3DOL86F+9EJSw192w7ohr4KSvVp/djd83PtwX5oswOD0zwn1LFX0QcRXeExgWdm+iqsNu97u/GxlqwrTDe8yQaNR/qf9VGUUgXYrxALTgW+gCvEJhDdIP2Zkplra1lwIXCFO1/bXf8lpmCgt8zNX/e7m9hcLxMyhtiFMGu7EQQOJwgWqZ+Tp3cG0cj7bNB26TuekUGg3HkiuTNjJj6slZAbNG8kWnatN/TsVmCVXYvozK+YtrCOiDu3BtvvsN8XiUMgrufs4cS/0Q5lGh8SiVh5cyYJOloer0U1xe0PsflBt7MPvACiYztIPCbgigmlagS0kHgCc6Mex8ouHopAZiAKdKmMIj4kCVpIwzvmjM28/g5TRU7jMH8xyBkLLd9drpHDJ/Ai2hv6Lz/XUnQ/CeZSBv8Nofzj3I4AdhP1Q6i6ZPREfvHMgD9uZcCWw=
+  - secure: 6WQ/sMtQN/sEr+0fbqfsAypcsNFkfcoaJwJGypqnPNOL8k2W0p3gnKhgk73Dm7Nk3T4KMFaRly/drgsArkpTX/uCuLl8rzmbgORKw8Edxjq5Twifc29IId6iIfPbW0LwW3YRHoHcDRhozyaPWZ/VWInu+y8igyewXc8PbDAx7n4ajhB28JKKLBbntE0IQp7JdVwqVL/NsPl4pVoEqsiX+vvwEaM564lxFqC/iuRM8daYpn6mnuXv/tkkmHCAqk/6RubG4i6AoD5BAAEnNS9FF7fl85vyS1yYlDvC0j0DSUBDzgmfed70EzjyyNWARTw9mzrPf79B2hj8eQ/Su1MdRUPj4tAbpqsU9f6ZsrLADJMd4pG6i5N3Va/K/yyfXCSM5fHcVbt9R+zF9C3dj5sYR0MqTq09/NA/Mo3AUddzjDu5xV2hfgo8ldMhT/syJsOX/eOjffVEgbjklA5afryG7twArR9LmKUqOl1EeylfjEtdVqiwyogF017krZHaWIdf+TVb8cmKinsnGac75k5UapKcTRQ1glEcoiiKiH40ijITnLWvT8z7CJFKzvDMzhY50ZbMAR9fPwzsPf/0wSFhgDdHuW2MAOrt3KWszKopSMMS7OvSZvBhh4V7+n/kzdp/Az7+lKLyhsju8M3A2FZSB35DN1SP+jgL+NOsACQ93Fw=
 branches:
   only:
-    - master
-    - develop
-
+  - master
+  - develop
 services:
   - docker
-
-# Install ansible
 addons:
   apt:
     packages:
     - python-pip
-
 install:
-  # Install ansible
   - pip install ansible
-
-  # Check ansible version
   - ansible --version
-
-  # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
-
 script:
-  # Basic role syntax check
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   - cd box-example/${container}
-  - make clean_build
-
+  - make initialize
+  - cd roles/${role_name}
+  - git checkout $BRANCH
+  - cd ../../
+  - make build
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+after_success:
+  - docker images
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
+    docker tag $REPO:$TAG $REPO:$TRAVIS_BUILD_NUMBER; docker push $REPO:$TRAVIS_BUILD_NUMBER;
+    fi
