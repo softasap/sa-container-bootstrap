@@ -5,21 +5,27 @@ env:
   matrix:
   - container=alpine-34
     role_name=softasap.sa-container-bootstrap
+    role_service: alpine
     hub_repository=softasap/sa-container-bootstrap
   - container=alpine-35
     role_name=softasap.sa-container-bootstrap
+    role_service: alpine
     hub_repository=softasap/sa-container-bootstrap
   - container=alpine-36
     role_name=softasap.sa-container-bootstrap
+    role_service: alpine
     hub_repository=softasap/sa-container-bootstrap
   - container=alpine-37
     role_name=softasap.sa-container-bootstrap
+    role_service: alpine
     hub_repository=softasap/sa-container-bootstrap
   - container=debian-jessie
     role_name=softasap.sa-container-bootstrap
+    role_service: jessy
     hub_repository=softasap/sa-container-bootstrap
   - container=ubuntu-xenial
     role_name=softasap.sa-container-bootstrap
+    role_service: xenial
     hub_repository=softasap/sa-container-bootstrap
   global:
   - secure: K+0GF4C2egu7hPvLEoSCWdQz65CUMes2c9QLZTpqVrQ9idTaDPFzMNt1BcqNYsNB1AVbWnsbdybxS7MYuN5rHffS6Z5nZENPVn1E7sWWLqC0rdOAwVKJo1NQ9V0Mt164JnwzsaOQRUcM+zHKoAQSRx7qQn88hyhzVN6YwZ9XOpK6gnKpaoLbAY46Vzrjjd0ldR0ROO3fEpKuarLylAT4mOQLGQESGT7dHGa+NnsaRRYyhDR3DOL86F+9EJSw192w7ohr4KSvVp/djd83PtwX5oswOD0zwn1LFX0QcRXeExgWdm+iqsNu97u/GxlqwrTDe8yQaNR/qf9VGUUgXYrxALTgW+gCvEJhDdIP2Zkplra1lwIXCFO1/bXf8lpmCgt8zNX/e7m9hcLxMyhtiFMGu7EQQOJwgWqZ+Tp3cG0cj7bNB26TuekUGg3HkiuTNjJj6slZAbNG8kWnatN/TsVmCVXYvozK+YtrCOiDu3BtvvsN8XiUMgrufs4cS/0Q5lGh8SiVh5cyYJOloer0U1xe0PsflBt7MPvACiYztIPCbgigmlagS0kHgCc6Mex8ouHopAZiAKdKmMIj4kCVpIwzvmjM28/g5TRU7jMH8xyBkLLd9drpHDJ/Ai2hv6Lz/XUnQ/CeZSBv8Nofzj3I4AdhP1Q6i6ZPREfvHMgD9uZcCWw=
@@ -51,8 +57,8 @@ script:
   - docker images
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - echo docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}
-  - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
-  - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api:latest ${hub_repository}:${container}.latest"
+  - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
+  - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest ${hub_repository}:${container}.latest"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.latest"
 
