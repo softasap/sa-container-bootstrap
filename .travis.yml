@@ -38,10 +38,9 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-
-  - cd box-example/${container} && ls
+  - cd box-example/${container}
   - ls
-  - cd box-example/${container} && make clean_build
+  - cd make clean_build
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
