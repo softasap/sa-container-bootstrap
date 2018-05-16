@@ -1,4 +1,5 @@
 python = python2.7
+PINPIP=9.0.3
 SHELL=/bin/bash
 DOCKER_HELPER := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))/docker_helper.sh
 
@@ -27,7 +28,12 @@ stop:   p-env/bin/ansible-container
 	@p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) stop
 	@echo "Application environment was stopped"
 
+
 p-env/bin/pip: p-env/bin/python
+	@if [ "$(PINPIP)" ]; then \
+		echo "Setting pinned pip"; \
+		p-env/bin/pip install -U pip==$(PINPIP); \
+	fi
 	p-env/bin/pip install -r requirements.txt
 
 p-env/bin/python:
