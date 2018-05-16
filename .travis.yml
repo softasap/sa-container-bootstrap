@@ -54,5 +54,8 @@ after_success:
   - docker images
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "develop" ]]; then
-    docker tag ${container}-api:latest ${hub_repository}:${container}.$TRAVIS_BUILD_NUMBER; docker tag ${container}-api:latest ${hub_repository}:${container}.latest; ${hub_repository}:${container}.$TRAVIS_BUILD_NUMBER;${hub_repository}:${container}.latest
+    docker tag ${container}-api:latest ${hub_repository}:${container}.$TRAVIS_BUILD_NUMBER; 
+    docker tag ${container}-api:latest ${hub_repository}:${container}.latest; 
+    docker push ${hub_repository}:${container}.$TRAVIS_BUILD_NUMBER;
+    docker push ${hub_repository}:${container}.latest
     fi
