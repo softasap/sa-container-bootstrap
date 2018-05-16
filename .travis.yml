@@ -5,8 +5,19 @@ python: "2.7"
 sudo: required
 
 env:
-  - container: alpine37
+  - container=alpine-34
+  - container=alpine-35
+  - container=alpine-36
+  - container=alpine-37
 
+# whitelist
+branches:
+  only:
+    - master
+    - develop
+
+services:
+  - docker
 
 # Install ansible
 addons:
