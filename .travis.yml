@@ -39,6 +39,8 @@ script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
+  - cd box-example/${container} && ls
+  - ls
   - cd box-example/${container} && make clean_build
 
 notifications:
