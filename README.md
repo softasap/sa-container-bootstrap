@@ -19,6 +19,19 @@ Third party ideas and libraries used
  - https://github.com/renatosilva/easyoptions
  - https://github.com/phusion/baseimage-docker
 
+
+| Distribution |   BASE IMAGE  | +SSHD       | +CRON       | + syslog ng |
+| ------------ |:-------------:|:-----------:|:-----------:|:-----------:|
+| Alpine 3.4 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| Alpine 3.5 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| Alpine 3.6 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| Alpine 3.7 | :white_check_mark: | :white_check_mark:| :white_check_mark:| :no_entry:|
+| debian-jessie | :white_check_mark: | :white_check_mark:| :white_check_mark:| :white_check_mark:|
+| debian-stretch | :white_check_mark: | :white_check_mark:| :white_check_mark:| :white_check_mark:|
+| ubuntu-xenial | :white_check_mark: | :white_check_mark:| :white_check_mark:| :white_check_mark:|
+
+
+
 Vars
 ----
 
@@ -125,7 +138,7 @@ Code in action
 See box-example for the standalone working example. It will configure application
 image that will display 'OK' on connect - check it out:
 
-[![](https://github.com/play-with-docker/stacks/raw/cff22438cb4195ace27f9b15784bbb497047afa7/assets/images/button.png)](http://play-with-docker.com?stack=https://raw.githubusercontent.com/softasap/sa-container-bootstrap/master/box-example/docker-compose-try.yml)
+[![](https://github.com/play-with-docker/stacks/raw/cff22438cb4195ace27f9b15784bbb497047afa7/assets/images/button.png)](http://play-with-docker.com?stack=https://raw.githubusercontent.com/softasap/sa-container-bootstrap/master/box-example/ubuntu-xenial/docker-compose-try.yml)
 
 More temporary hints on ansible container troubleshouting, if any on https://gist.github.com/Voronenko/77fc4743ef7e70d74ee74b7ee62fd7e5  ()
 

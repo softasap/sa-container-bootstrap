@@ -2,8 +2,25 @@
 language: python
 python: "2.7"
 
-# Use the new container infrastructure
-sudo: false
+sudo: required
+
+env:
+  - container=alpine-34
+  - container=alpine-35
+  - container=alpine-36
+  - container=alpine-37
+  - container=debian-jessie
+#  - container=debian-stretch
+  - container=ubuntu-xenial
+
+# whitelist
+branches:
+  only:
+    - master
+    - develop
+
+services:
+  - docker
 
 # Install ansible
 addons:
@@ -24,6 +41,8 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - cd box-example/${container}
+  - make clean_build
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
