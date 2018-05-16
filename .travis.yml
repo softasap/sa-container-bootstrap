@@ -55,6 +55,8 @@ script:
   - cd ../../
   - make build
   - docker images
+  - ls -la /home/travis/.docker/config.json
+  - rm -rf /home/travis/.docker/config.json
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - echo docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
