@@ -44,13 +44,13 @@ script:
 - git checkout $BRANCH
 - cd ../../
 - make build
+
+after_script:
+- docker login -e="$DOCKER_HUB_EMAIL" -u="$DOCKER_HUB_USERNAME" -p="$DOCKER_HUB_PASSWORD"
 - docker images
-- echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 - echo docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}
-- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest
-  ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
-- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest
-  ${hub_repository}:${container}.latest"
+- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest  ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
+- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest  ${hub_repository}:${container}.latest"
 - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
 - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.latest"
 notifications:
