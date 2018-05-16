@@ -48,6 +48,7 @@ script:
   - git checkout $BRANCH
   - cd ../../
   - make build
+  - docker images
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
 after_success:
@@ -56,5 +57,5 @@ after_success:
   - echo docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api:latest ${hub_repository}:${container}.latest"
-  - "[[ $TRAVIS_BRANCH == 'developd ]] && docker push ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
+  - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
   - "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.latest"
