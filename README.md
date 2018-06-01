@@ -11,7 +11,7 @@ sa-container-bootstrap
 [ansible-container-url]: http://bit.ly/ansible-container
 [softasap-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [softasap-license-url]: https://opensource.org/licenses/MIT
-[packer-image]: https://img.shields.io/badge/packer--io-ready-brightgreen.svg
+[packer-io-image]: https://img.shields.io/badge/packer--io-ready-brightgreen.svg
 [packer-io-url]: http://packer.io
 
 
