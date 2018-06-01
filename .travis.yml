@@ -1,48 +1,57 @@
----
 language: python
-python: "2.7"
-
+python: '2.7'
 sudo: required
-
 env:
-  - container=alpine-34
-  - container=alpine-35
-  - container=alpine-36
-  - container=alpine-37
-  - container=debian-jessie
-#  - container=debian-stretch
-  - container=ubuntu-xenial
-
-# whitelist
+  matrix:
+  - container=alpine-34 role_name=softasap.sa-container-bootstrap role_service=alpine
+    hub_repository=softasap/sa-container-bootstrap
+  - container=alpine-35 role_name=softasap.sa-container-bootstrap role_service=alpine
+    hub_repository=softasap/sa-container-bootstrap
+  - container=alpine-36 role_name=softasap.sa-container-bootstrap role_service=alpine
+    hub_repository=softasap/sa-container-bootstrap
+  - container=alpine-37 role_name=softasap.sa-container-bootstrap role_service=alpine
+    hub_repository=softasap/sa-container-bootstrap
+  - container=debian-jessie role_name=softasap.sa-container-bootstrap role_service=jessy
+    hub_repository=softasap/sa-container-bootstrap
+  - container=ubuntu-xenial role_name=softasap.sa-container-bootstrap role_service=xenial
+    hub_repository=softasap/sa-container-bootstrap
+  global:
+  - secure: kON00VReZnx7e2gA8hfz8aCEg6REzLhVz9d/2Ql/Jo9N3DX3Ffn2bIFVy9uxXB1oW5GpuNlvsCEt0hzz5lhNbbgBs9wZaNcHx1o9FH9pLOSyCBSVcKL1pg6G71YlhIGGcTjBGpR/KsFCHomOaRHflStl4w5ys/3IvGzblvobtHbihOhRivL5mPQUhw6kHyIZWIUNGFAYv/LriDFLqGXf3Nuzd5P4IEDiUlLbok+kX1YkxHPvdCHcoeWVY5rvu9S+fd3MWVAoEWAxig7C0XhljytMtq/p+xgxPOasnBzeurDE2E7r5BZYfzJ6DmrEDO5TYj3Bqn7arZdKfiok4aDPksk/PlthSSDFjlOHpTNOlLl1yHhkAWmQpKEPD1D8ptkh4Kq27ehEuV/9AE8uTwuTOjLQ/ayBisrqQfbAQUNOIUhQuFi9YkwVynOWR5ugBKiptUQKnkf/PZxpSVwl4oWtY2iQAlJUAipYWhCchY80bHZVdxqDGzfRvRlhZibQwR/JNvCFX02x36oHRhu8GEWVir50WjfQ2C+IWy0KxCYpSjqtu1swpOqSRe997KwP4zGmsVknW27ZoFq/85k/Y3GBk3U/mcdgInqhBVXrp3w3NXLLvlBbyT63fQnw4c1ikyFlJGzWyKVG3+DzhtUgjRb6ZGC6EYtrdnTO0l3aXTE8kfE=
+  - secure: OwtU3WmgQen+2uINYmErIZUiOJ98VXSJnrr/KbSXOH8zgYd8pTk/AukIFCmhDSLgL1nJ7k0X2rfjHG59mQdqDaRHaI6KORVu65kdlvHAObpqEsPiWVsI+cjYhCRBdYLCmwjawIrdYMwdEx98Ia2HZ3wGuQFnsQOZc9TaERTSXk+PcuwLPVn2dcNL6bPSluSvptZaZzgj1oTbXxKUv0YuOP9zTn0S0z+Axgy1PFh0bpvqSm3q3N+i3m5++2LKk+W+Q+ui/9JEyEnr5BzmoON8ly8Dk4z6EUuLbwyWGLh7PY00w5hnffEzMfP8axUHSshHoqpx5YSq2Mgz9X7y2YbkXA6z3rj1Vg8yg8rf3i7+D4XBhD+BRmGHx5bm2QCvS+vKB18IHKlgcHMeas5Ywt1K4tUU9P37HPvop9Dh+TQvyYff/ArCNeYWIb7JZrUpzoBLs+4pp7jhF+9Yp3m2ri2a4wNoOLq7TrfdmZ1uzMd2fDsyY4e5QuL3wJdApDsR/btXI6D28YNwoESVfuylLvWftDjEWh6v6cVmoxgRmBujPeNMyKhLw4/mdrIMGQb8zU7UtPUIQfL+5zSDZrPYeZjpdqIPv6oYZFVFu6SQgXYz729TM6fe7OWE9OOVUyc7f7hHY4WBnLzV7se2EDeyG6jWO7dxFGdWckSza3eFMVsiU/A=
+  - secure: odzvZU83CD9vlJxlzxGFdgglfNIdm6Pr5v6GqOv9W71ZleVJyXeXt0g9x4Nx+sNYFTOAkxhwMsdIEjJoBFCwtYxUVZNr9wo6T//GlIyDRxgHbzLk0b8r1lPaBJnESIVZls7+xSx9bNcGtz0DGzEvJyjGy8BNdogzw7SeTy2tqP2ALtj+AFSMz2A9FoNTZ/fBDh1btYe06w7grbDYbLoVVFMmoJ5rZDh9kKcmr9i9GCiAunYfsGtw51wXdZpGqdBk59/Rr+Ee/bEZZGBSsYj6gWG7aYFu9tYITEyId/mbOk/ZRPU6GH4xVPStbZ6sIykxQcI0Yz2ETOnDtXVTNRnhvqljOj1tbqiik9Nk/m9KTSd9DlWdLARPoIH/V5zVQkO8r+R/yLBUlUKg0nMrkd7kqQhDKYuvtbPSiguH/1pfXchYvHfO0dVAocaYbbHsRT60qFxwwe0k2JhYZenyoWdC2COTYxldOfM4VYv0mXhIVjLhxK1LJeUtk+K/8znrMXz+eVZBUD1XLDoT1WiXriUybU7RYtkW9BIqdgOCQqdKhkI9wfDR81USM/WrXBSPT/rK2g56LEnzg38S264ko15zVUxF+Yku92ZvPedvGdu6YFvKdqoRNC6d5Pk1g6dPScWlmtG6BhqqG8rxXvrvHxOGA1l/X6NhEEiL6+6TS/vK2co=
 branches:
   only:
-    - master
-    - develop
-
+  - master
+  - develop
 services:
-  - docker
-
-# Install ansible
+- docker
 addons:
   apt:
     packages:
     - python-pip
-
 install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
-
+- pip install ansible
+- ansible --version
+- printf '[defaults]\nroles_path=../' >ansible.cfg
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  - cd box-example/${container}
-  - make clean_build
+- export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH;
+  else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+- echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
+- ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+- cd box-example/${container}
+- make initialize
+- cd roles/${role_name}
+- git checkout $BRANCH
+- cd ../../
+- make build
 
+after_script:
+- docker login -e="$DOCKER_HUB_EMAIL" -u="$DOCKER_HUB_USERNAME" -p="$DOCKER_HUB_PASSWORD"
+- docker images
+- echo docker tag ${container}-api:latest ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}
+- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest  ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
+- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker tag ${container}-api-${role_service}:latest  ${hub_repository}:${container}.latest"
+- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.${TRAVIS_BUILD_NUMBER}"
+- "[[ $TRAVIS_BRANCH == 'develop' ]] && docker push ${hub_repository}:${container}.latest"
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

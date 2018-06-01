@@ -4,15 +4,18 @@ sa-container-bootstrap
 [![Build Status](https://travis-ci.org/softasap/sa-container-bootstrap.svg?branch=master)](https://travis-ci.org/softasap/sa-container-bootstrap)
 [![License: MIT][softasap-license-image] ][softasap-license-url]
 [![Ansible-Container friendly][ansible-container-image] ][ansible-container-url]
+[![Packer.io friendly friendly][packer-io-image] ][packer-io-url]
 
 
 [ansible-container-image]: https://img.shields.io/badge/ansible--container-ready-brightgreen.svg
 [ansible-container-url]: http://bit.ly/ansible-container
 [softasap-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [softasap-license-url]: https://opensource.org/licenses/MIT
+[packer-io-image]: https://img.shields.io/badge/packer--io-ready-brightgreen.svg
+[packer-io-url]: http://packer.io
 
 
-Helper role to be executed with `ansible-container` aiming to pre-configure guest OS for better image
+Helper role to be executed with `ansible-container` or Hashicorp `packer` aiming to pre-configure guest OS for better image
 Ubuntu part is based on Phusion BaseImage idea. See original license.
 
 Third party ideas and libraries used

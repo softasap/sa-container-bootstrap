@@ -21,6 +21,12 @@ function _getUpDirLevel2() {
          basename ${PWD%/*}
 }
 
+
+function _getUpDirLevel3() {
+         basename ${PWD%/*/*}
+}
+
+
 function getVersion() {
 	result=$(_getRelease)
         echo $result
@@ -37,6 +43,12 @@ function getUpDirLevel2() {
         result=$(_getUpDirLevel2)
         echo $result
 }
+
+function getUpDirLevel3() {
+        result=$(_getUpDirLevel2)
+        echo $result
+}
+
 
 function getPrefix() {
         result=$(_getPrefix)

@@ -1,4 +1,5 @@
 */.vscode/*
+box-example-packer/**/roles/*
 box-example/roles/*
 box-example/ansible-deployment/*
 box-example/p-env/*

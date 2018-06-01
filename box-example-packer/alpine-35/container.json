@@ -1,0 +1,39 @@
+{
+    "variables": {
+      "image_name": "{{env `IMAGE_NAME`}}",
+      "conductor_name": "{{env `CONDUCTOR_NAME`}}",
+      "CONDUCTOR_LD_LIBRARY_PATH": "{{env `CONDUCTOR_LD_LIBRARY_PATH`}}",
+      "CONDUCTOR_CPATH": "{{env `CONDUCTOR_CPATH`}}",
+      "CONDUCTOR_PATH": "{{env `CONDUCTOR_PATH`}}"
+    },
+    "builders": [
+     {
+        "type": "docker",
+        "run_command": [
+             "-v", "/var/lib/docker/volumes/conductor_usr/_data:/_usr",
+             "-v", "/var/lib/docker/volumes/conductor_lib/_data:/_lib",
+             "-e","LD_LIBRARY_PATH='{{user `CONDUCTOR_LD_LIBRARY_PATH`}}'",
+             "-e","CPATH='{{user `CONDUCTOR_CPATH`}}'",
+             "-e","PATH='{{user `CONDUCTOR_PATH`}}'",
+             "-d", "-t", "-i", "{{.Image}}", "/bin/sh"
+        ],
+        "image": "alpine:3.5",
+        "commit": true,
+        "changes": [
+            "EXPOSE 8000",
+            "ENTRYPOINT [\"/docker-entrypoint\"]"
+        ]
+    }],
+
+    "provisioners": [{
+        "type": "ansible",
+        "user": "root",
+        "playbook_file": "container.yml"
+    }],
+
+    "post-processors": [[ {
+        "type": "docker-tag",
+        "repository": "{{user `image_name`}}",
+        "tag": "latest"
+    } ]]
+}

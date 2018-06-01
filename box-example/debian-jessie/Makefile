@@ -3,8 +3,8 @@ PINPIP=9.0.3
 SHELL=/bin/bash
 DOCKER_HELPER := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))/docker_helper.sh
 
-ROLE_VERSION=$(shell cat $(PWD)/../version.txt)
-ROLE_NAME=$(shell . $(DOCKER_HELPER) ; getUpDirLevel1)
+ROLE_VERSION=$(shell cat $(PWD)/../../version.txt)
+ROLE_NAME=$(shell . $(DOCKER_HELPER) ; getUpDirLevel3)
 
 REGISTRY_HOST=docker.io
 USERNAME=softasap

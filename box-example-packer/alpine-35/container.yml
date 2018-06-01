@@ -1,0 +1,26 @@
+---
+- hosts: default
+  gather_facts: True
+
+  vars:
+    ansible_python_interpreter: "/_usr/bin/python"
+
+  roles:
+       - {
+           role: "softasap.sa-container-bootstrap",
+           option_container_syslog_ng: false,
+           option_container_sshd: true
+         }
+       - {
+           role: "softasap.sa-nginx-container",
+           container_init: "phusion-init" # uses runit for services management and upstart.
+         }
+       - {
+           role: "../custom-roles/app-nginx-stub-deploy"
+         }
+
+
+  tasks:
+
+    - debug: msg="Tasks section"
+
