@@ -2,7 +2,7 @@
 version: '3.1'
 services:
   nginx:
-    image: sa-container-bootstrap-api:latest
+    image: softasap/sa-container-box-examples:box-example-packer.packer.latest
     ports:
     - 8000:8000
     command: ['/docker-entrypoint']
