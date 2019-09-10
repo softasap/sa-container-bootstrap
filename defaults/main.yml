@@ -19,6 +19,7 @@ option_container_syslog_ng: true
 
 container_ssh_private_key: "{{role_dir}}/files/keys/insecure_key"
 container_ssh_public_key: "{{role_dir}}/files/keys/insecure_key.pub"
+container_ssh_port: 2222
 
 # dumb-init specific settings
 dumb_init_version: "1.2.0"
@@ -40,4 +41,3 @@ alpine_custom_repo_tag: ""
 alpine_custom_packages:
   - "bash{{alpine_custom_repo_tag | default('')}}"
   - "psmisc{{alpine_custom_repo_tag | default('')}}"
-

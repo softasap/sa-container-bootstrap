@@ -2,20 +2,28 @@
 
   - name: CLEANUP | apt-get -qy autoremove
     shell: apt-get -qy autoremove
+    tags:
+      - skip_ansible_lint
 
   - name: CLEANUP | apt-get clean
     shell: apt-get clean
+    tags:
+      - skip_ansible_lint
 
   - name: CLEANUP | rm -rf /tmp/* /var/tmp/*
     shell: rm -rf /tmp/* /var/tmp/*
     ignore_errors: true
+    tags:
+      - skip_ansible_lint
 
   - name: CLEANUP | rm -rf /var/lib/apt/lists/*
     shell: rm -rf /var/lib/apt/lists/*
-    ignore_errors: true    
+    ignore_errors: true
+    tags:
+      - skip_ansible_lint
 
   - name: CLEANUP | rm -f /etc/ssh/ssh_host_*
     shell: rm -f /etc/ssh/ssh_host_*
-    ignore_errors: true    
-
-
+    ignore_errors: true
+    tags:
+      - skip_ansible_lint

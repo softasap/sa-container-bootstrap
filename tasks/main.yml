@@ -3,48 +3,48 @@
   # - block:
 
   #   - name: Check interpreter exists
-  #     stat: path="{{container_python_interpeter}}"
+  #     stat: path="{{ container_python_interpeter }}"
   #     register: interpreter_present
 
   #   - set_fact:
-  #       container_python_interpeter: "{{container_python3_interpeter}}"
-  #     when: interpreter_present.stat.exists == False
+  #       container_python_interpeter: "{{ container_python3_interpeter }}"
+  #     when: not interpreter_present.stat.exists
 
   #   - name: Check fallback interpreter exists
-  #     stat: path="{{container_python_interpeter}}"
+  #     stat: path="{{ container_python_interpeter }}"
   #     register: interpreter2_present
-  #     when: interpreter_present.stat.exists == False
+  #     when: not interpreter_present.stat.exists
 
   #   - assert:
   #       that:
-  #         - "interpreter2_present.stat.exists == True"
+  #         - "interpreter2_present.stat.exists"
   #       msg: "For phusion-init either python or python3 needs to be present inside container"
-  #     when: interpreter_present.stat.exists == False
+  #     when: not interpreter_present.stat.exists
   #
   #  when: container_init == "phusion-init"
 
-  - debug: msg="configuring {{ansible_distribution}} / {{ansible_distribution_release}}"
+  - debug: msg="configuring {{ ansible_distribution }} / {{ ansible_distribution_release }}"
 
-  - include: tasks_pre_docker_debian_ubuntu.yml
+  - include_tasks: tasks_pre_docker_debian_ubuntu.yml
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
-  - include: tasks_pre_docker_alpine.yml
+  - include_tasks: tasks_pre_docker_alpine.yml
     when: ansible_distribution in ["Alpine"]
 
 
-  - include: tasks_system_services.yml
+  - include_tasks: tasks_system_services.yml
 
-  - include: tasks_cron.yml
+  - include_tasks: tasks_cron.yml
     when: option_container_cron
 
-  - include: tasks_sshd.yml
+  - include_tasks: tasks_sshd.yml
     when: option_container_sshd
 
-  - include: tasks_syslog_ng.yml
+  - include_tasks: tasks_syslog_ng.yml
     when: option_container_syslog_ng
 
-  - include: tasks_post_docker_debian_ubuntu.yml
+  - include_tasks: tasks_post_docker_debian_ubuntu.yml
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
-  - include: tasks_post_docker_alpine.yml
+  - include_tasks: tasks_post_docker_alpine.yml
     when: ansible_distribution in ["Alpine"]

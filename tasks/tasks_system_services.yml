@@ -3,52 +3,63 @@
   - name: SYSTEM SERVICES | groupadd -g 8377 docker_env
     shell: groupadd -g 8377 docker_env
     when: ansible_distribution in ["Ubuntu", "Debian"]
+    tags:
+      - skip_ansible_lint
 
   - name: SYSTEM SERVICES | groupadd -g 8377 docker_env
     shell: addgroup -g 8377 docker_env
     when: ansible_distribution in ["Alpine"]
-
+    tags:
+      - skip_ansible_lint
 
   - name: "SYSTEM SERVICES | Create init directories"
-    file: path="{{item}}" state="directory"
+    file: path="{{ item }}" state="directory"
     with_items:
-      - "{{container_init_directory}}"
+      - "{{ container_init_directory }}"
       - "/etc/my_init.pre_shutdown.d"
       - "/etc/my_init.post_shutdown.d"
 
   - name: "SYSTEM SERVICES | Create env directories"
-    file: path="{{item}}" state="directory" mode="700"
+    file: path="{{ item }}" state="directory" mode="0700"
     with_items:
-        - "{{container_environment_directory}}"
+        - "{{ container_environment_directory }}"
 
   - name: SYSTEM SERVICES | touch /etc/container_environment.sh
     copy: content="" dest="/etc/container_environment.sh" group="docker_env"
 
   - name: SYSTEM SERVICES | touch /etc/container_environment.json
-    copy: content="" dest="/etc/container_environment.json" group="docker_env" mode="640"
+    copy: content="" dest="/etc/container_environment.json" group="docker_env" mode="0640"
 
   - name: SYSTEM SERVICES | ln -s /etc/container_environment.sh /etc/profile.d/
     shell: ln -s /etc/container_environment.sh /etc/profile.d/
+    tags:
+      - skip_ansible_lint
 
   - name: SYSTEM SERVICES | ln -s /etc/container_environment.sh /etc/profile.d/
-    file: path="{{item}}" group="docker_env" mode="640"
+    file: path="{{ item }}" group="docker_env" mode="0640"
     with_items:
       - "/etc/container_environment.sh"
       - "/etc/container_environment.json"
 
   - name: SYSTEM SERVICES | load environment from .bashrc
     shell:  echo ". /etc/container_environment.sh" >> /root/.bashrc
+    tags:
+      - skip_ansible_lint
 
   - block:
 
     - name: SYSTEM SERVICES | apk --no-cache upgrade
       shell: apk --no-cache upgrade
+      tags:
+        - skip_ansible_lint
 
     - name: SYSTEM SERVICES | Often used tools
-      shell:  "apk --no-cache add {{item}}"
+      shell:  "apk --no-cache add {{ item }}"
       ignore_errors: true
       with_items:
-        - "{{alpine_custom_packages}}"
+        - "{{ alpine_custom_packages }}"
+      tags:
+        - skip_ansible_lint
 
     - name: SYSTEM SERVICES | DISTRIB_CODENAME
       shell:  cat /etc/alpine-release >> /etc/container_environment/DISTRIB_CODENAME
@@ -56,6 +67,6 @@
     when: ansible_distribution in ["Alpine"]
 
 
-  - include: container_svc/{{container_svc}}.yml
+  - include_tasks: container_svc/{{ container_svc }}.yml
 
-  - include: container_init/{{container_init}}.yml
+  - include_tasks: container_init/{{ container_init }}.yml

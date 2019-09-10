@@ -3,3 +3,5 @@
   - name: CLEANUP | rm -rf /tmp/* /var/tmp/*
     shell: rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
     ignore_errors: true
+    tags:
+      - skip_ansible_lint
