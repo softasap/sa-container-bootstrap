@@ -1,12 +1,16 @@
 ---
   - name: SSH | Install openssh-server
     package: name="openssh-server" state="present"
+    retries: 3
+    register: openssh_install_result
+    until: openssh_install_result is not failed
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SSH | Install openssh-server
-    shell: "apk --no-cache add --update openssh{{alpine_custom_repo_tag}}"
+    shell: "apk --no-cache add --update openssh{{ alpine_custom_repo_tag }}"
     when: ansible_distribution in ["Alpine"]
-
+    tags:
+      - skip_ansible_lint
 
   - name: SSH | Create /var/run/sshd
     file: path="/var/run/sshd" state="directory"
@@ -19,33 +23,44 @@
     when: not option_container_sshd_enabled
 
   - name: SSH | Template /etc/service/sshd/run
-    template: src="{{role_dir}}/templates/sshd/sshd.runit.j2" dest="/etc/service/sshd/run" mode="u=rwx,g=rx,o=rx"
+    template: src="{{ role_dir }}/templates/sshd/sshd.runit.j2" dest="/etc/service/sshd/run" mode="u=rwx,g=rx,o=rx"
 
   - block:
 
-    - name: "SSH | Template  {{supervisor_confd_path}}/sshd.conf"
-      template: src="{{role_dir}}/templates/sshd/sshd.supervisord.j2" dest="{{supervisor_confd_path}}/sshd.conf" mode="u=rw,g=r,o=r"
+    - name: "SSH | Template  {{ supervisor_confd_path }}/sshd.conf"
+      template:
+         src: "{{ role_dir }}/templates/sshd/sshd.supervisord.j2"
+         dest: "{{ supervisor_confd_path }}/sshd.conf"
+         mode: "u=rw,g=r,o=r"
 
     when: container_svc == "supervisord"
 
 
   - name: SSH | Template /etc/ssh/sshd_config
-    template: src="{{role_dir}}/templates/sshd/sshd_config.j2" dest="/etc/ssh/sshd_config"
+    template: src="{{ role_dir }}/templates/sshd/sshd_config.j2" dest="/etc/ssh/sshd_config"
 
-  - name: "SSH | Template re-generating host keys into {{container_init_directory}}"
-    template: src="{{role_dir}}/templates/sshd/regenerate_ssh_host_keys.sh.j2" dest="{{container_init_directory}}/00_regen_ssh_host_keys.sh" mode="u=rwx,g=rx,o=rx"
+  - name: "SSH | Template re-generating host keys into {{ container_init_directory }}"
+    template:
+       src: "{{ role_dir }}/templates/sshd/regenerate_ssh_host_keys.sh.j2"
+       dest: "{{ container_init_directory }}/00_regen_ssh_host_keys.sh"
+       mode: "u=rwx,g=rx,o=rx"
 
   - name: SSH | Create /root/.ssh
-    file: path="/root/.ssh" state="directory" mode="700" owner="root" group="root"
+    file: path="/root/.ssh" state="directory" mode="0700" owner="root" group="root"
 
   - name: SSH | Create /root/.ssh
-    file: path="/root/.ssh" state="directory" mode="700" owner="root" group="root"
+    file: path="/root/.ssh" state="directory" mode="0700" owner="root" group="root"
 
-  - name: "SSH | Create {{container_ssh_private_key}}"
-    copy: src="{{container_ssh_private_key}}" dest="/etc/insecure_key" mode="644" owner="root" group="root"
+  - name: "SSH | Create {{ container_ssh_private_key }}"
+    copy: src="{{ container_ssh_private_key }}" dest="/etc/insecure_key" mode="0644" owner="root" group="root"
 
-  - name: "SSH | Create {{container_ssh_public_key}}"
-    copy: src="{{container_ssh_public_key}}" dest="/etc/insecure_key.pub" mode="644" owner="root" group="root"
+  - name: "SSH | Create {{ container_ssh_public_key }}"
+    copy:
+       src: "{{ container_ssh_public_key }}"
+       dest: "/etc/insecure_key.pub"
+       mode: "0644"
+       owner: "root"
+       group: "root"
 
   - name: SSH | Authorize key
     authorized_key:

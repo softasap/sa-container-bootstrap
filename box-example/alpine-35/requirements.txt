@@ -1,2 +1,2 @@
-ansible-container[docker]
+sa-ansible-container[docker]
 

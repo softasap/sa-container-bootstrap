@@ -1,6 +1,7 @@
 version: "2"
 settings:
   conductor_base: debian:stretch
+  conductor_provider: softasap
   volumes:
    - temp-space:/tmp   # Used to copy static content between containers
 

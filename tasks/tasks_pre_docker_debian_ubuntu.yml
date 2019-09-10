@@ -1,10 +1,10 @@
 ---
 
-  - set_fact:
+  - name: BOOT | set service binaries pathes
+    set_fact:
       runsvdir_binary: "/usr/bin/runsvdir"
       sv_binary: "/usr/bin/sv"
       bin_dir: "/usr/bin"
-
 
   - name: BOOT | create /etc/container_environment
     file: path="/etc/container_environment" state="directory"
@@ -18,21 +18,33 @@
              sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list && \
              sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
     when: ansible_distribution in ["Ubuntu"]
+    tags:
+      - skip_ansible_lint
 
   - name: Debian Stretch requires dirmngr package to be installed in order to use the apt-key
     apt:
       name: dirmngr
       state: present
+    retries: 3
+    register: install_result
+    until: install_result is not failed
+
     when: ansible_distribution in ["Ubuntu"] and ansible_distribution_release in ["stretch"]
 
   - name: BOOT | Update packages
     shell: apt-get update
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | Fix some issues with APT packages per https://github.com/dotcloud/docker/issues/1024 (1/2)
     shell: dpkg-divert --local --rename --add /sbin/initctl
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | Fix some issues with APT packages per https://github.com/dotcloud/docker/issues/1024 (2/2)
     shell: ln -sf /bin/true /sbin/initctl
+    tags:
+      - skip_ansible_lint
 
 ## Replace the 'ischroot' tool to make it always return true.
 ## Prevent initscripts updates from breaking /dev/shm.
@@ -41,42 +53,67 @@
 
   - name: BOOT | Patch ischroot (1/2)
     shell: dpkg-divert --local --rename --add /usr/bin/ischroot
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | Patch ischroot (2/2)
     shell: ln -sf /bin/true /usr/bin/ischroot
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | apt-utils fix
     apt: pkg="apt-utils"  state="present"
+    retries: 3
+    register: install_result
+    until: install_result is not failed
 
   - name: BOOT | Install HTTPS support for APT.
-    apt: pkg="{{item}}"  state="present"
+    apt: pkg="{{ item }}"  state="present"
+    retries: 3
+    register: install_result
+    until: install_result is not failed
     with_items:
       - apt-transport-https
       - ca-certificates
 
   - name: BOOT | Install add-apt-repository
-    apt: pkg="{{item}}"  state="present"
+    apt: pkg="{{ item }}"  state="present"
+    retries: 3
+    register: install_result
+    until: install_result is not failed
     with_items:
       - software-properties-common
 
   - name: BOOT | Upgrade all packages.
     shell: apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold"
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | Fix locale
     apt: pkg="language-pack-en"  state="present"
+    retries: 3
+    register: install_result
+    until: install_result is not failed
     when: ansible_distribution in ["Ubuntu"]
 
   - name: BOOT | Fix locale
     apt: pkg="locales"  state="present"
+    retries: 3
+    register: install_result
+    until: install_result is not failed
     when: ansible_distribution in ["Debian"]
 
 
   - name: BOOT | locale-gen en_US
     shell: locale-gen en_US
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
     shell: update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
     when: ansible_distribution in ["Ubuntu"]
+    tags:
+      - skip_ansible_lint
 
   - name: BOOT | en_US.UTF-8 > /etc/container_environment/LANG
     copy: content="en_US.UTF-8" dest="/etc/container_environment/LANG" force="no"

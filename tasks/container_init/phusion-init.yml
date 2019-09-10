@@ -7,13 +7,13 @@
 
   - name: Check python interpreter
     shell: "which python3"
-    when: pyexists | failed
+    when: pyexists is failed
     ignore_errors: true
     register: py3detected
 
   - set_fact:
       container_python_interpeter: "{{py3detected.stdout}}"
-    when: pyexists | failed and not py3detected | failed
+    when: pyexists is failed and not py3detected is failed
 
   - name: Check python interpreter found
     shell: "test -x {{container_python_interpeter}}"
@@ -22,7 +22,7 @@
 
   - name: "SYSTEM SERVICES | Template my_init into /docker-entrypoint"
     template: src="{{role_dir}}/templates/container_init/my_init.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
-    when: not pyexists_really | failed
+    when: not pyexists_really is failed
 
   - block:
 
@@ -41,4 +41,4 @@
     - name: "SYSTEM SERVICES | Template my_init_fallback into /docker-entrypoint"
       template: src="{{role_dir}}/templates/container_init/my_init_fallback.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
 
-    when: pyexists_really | failed
+    when: pyexists_really is failed

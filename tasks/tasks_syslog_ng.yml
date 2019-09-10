@@ -2,11 +2,16 @@
 
   - name: SYSLOG | Install syslog daemon.
     apt: pkg="syslog-ng-core" state="present"
+    retries: 3
+    register: syslog_install_result
+    until: syslog_install_result is not failed
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: SYSLOG | Install syslog daemon.
-    shell: "apk --no-cache add syslog-ng{{alpine_custom_repo_tag}}"
+    shell: "apk --no-cache add syslog-ng{{ alpine_custom_repo_tag }}"
     when: ansible_distribution in ["Alpine"]
+    tags:
+      - skip_ansible_lint
 
   - name: SYSLOG | Install syslog daemon.
     fail: msg="SYSLOG NOT SUPPORTED YET"
@@ -17,12 +22,18 @@
     file: path="/etc/service/syslog-ng" state="directory"
 
   - name: SYSLOG | template /etc/service/syslog-ng/run
-    template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.runit.j2" dest="/etc/service/syslog-ng/run" mode="u=rwx,g=rx,o=rx"
+    template:
+       src: "{{ role_dir }}/templates/syslog-ng/syslog-ng.runit.j2"
+       dest: "/etc/service/syslog-ng/run"
+       mode: "u=rwx,g=rx,o=rx"
 
   - block:
 
-    - name: "SYSLOG | Template  {{supervisor_confd_path}}/syslog-ng.conf"
-      template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.supervisord.j2" dest="{{supervisor_confd_path}}/syslog-ng.conf" mode="u=rw,g=r,o=r"
+    - name: "SYSLOG | Template  {{ supervisor_confd_path }}/syslog-ng.conf"
+      template:
+         src: "{{ role_dir }}/templates/syslog-ng/syslog-ng.supervisord.j2"
+         dest: "{{ supervisor_confd_path }}/syslog-ng.conf"
+         mode: "u=rw,g=r,o=r"
 
     when: container_svc == "supervisord"
 
@@ -31,7 +42,7 @@
 
 # TODO support Alpine too
   - name: SYSLOG | template /etc/default/syslog-ng
-    template: src="{{role_dir}}/templates/syslog-ng/syslog_ng_default.j2" dest="/etc/default/syslog-ng"
+    template: src="{{ role_dir }}/templates/syslog-ng/syslog_ng_default.j2" dest="/etc/default/syslog-ng"
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: BOOT | touch /var/log/syslog
@@ -41,31 +52,42 @@
     file: path="/etc/syslog-ng" state="directory"
 
   - name: SYSLOG | template /etc/syslog-ng/syslog-ng.conf
-    template: src="{{role_dir}}/templates/syslog-ng/syslog-ng.conf.j2" dest="/etc/syslog-ng/syslog-ng.conf"
+    template: src="{{ role_dir }}/templates/syslog-ng/syslog-ng.conf.j2" dest="/etc/syslog-ng/syslog-ng.conf"
 
   - name: SYSLOG | Install syslog to "docker logs" forwarder.
     file: path="/etc/service/syslog-forwarder" state="directory"
 
   - name: SYSLOG | template /etc/service/syslog-ng/run
-    template: src="{{role_dir}}/templates/syslog-ng/syslog-forwarder.runit.j2" dest="/etc/service/syslog-forwarder/run" mode="u=rwx,g=rx,o=rx"
+    template:
+       src: "{{ role_dir }}/templates/syslog-ng/syslog-forwarder.runit.j2"
+       dest: "/etc/service/syslog-forwarder/run"
+       mode: "u=rwx,g=rx,o=rx"
 
   - block:
 
-    - name: SYSLOG | Template  {{supervisor_confd_path}}/syslog-forwarder.conf
-      template: src="{{role_dir}}/templates/syslog-ng/syslog-forwarder.supervisord.j2" dest="{{supervisor_confd_path}}/syslog-forwarder.conf" mode="u=rw,g=r,o=r"
+    - name: SYSLOG | Template  {{ supervisor_confd_path }}/syslog-forwarder.conf
+      template:
+        src: "{{ role_dir }}/templates/syslog-ng/syslog-forwarder.supervisord.j2"
+        dest: "{{ supervisor_confd_path }}/syslog-forwarder.conf"
+        mode: "u=rw,g=r,o=r"
 
     when: container_svc == "supervisord"
 
   - name: SYSLOG | Install logrotate.
     apt: pkg="logrotate" state="present"
+    retries: 3
+    register: logrotate_install_result
+    until: logrotate_install_result is not failed
     when: ansible_distribution in ["Debian", "Ubuntu"]
 
   - name: SYSLOG | Install syslog daemon.
     shell: apk --no-cache add logrotate
     when: ansible_distribution in ["Ansible"]
+    tags:
+      - skip_ansible_lint
 
   - name: SYSLOG | template /etc/syslog-ng/syslog-ng.conf
-    template: src="{{role_dir}}/templates/syslog-ng/logrotate.conf.j2" dest="/etc/logrotate.conf"
+    template: src="{{ role_dir }}/templates/syslog-ng/logrotate.conf.j2" dest="/etc/logrotate.conf"
 
   - name: SYSLOG | template /etc/logrotate.d/syslog-ng
-    template: src="{{role_dir}}/templates/syslog-ng/logrotate_syslogng.j2" dest="/etc/logrotate.d/syslog-ng"
+    template: src="{{ role_dir }}/templates/syslog-ng/logrotate_syslogng.j2" dest="/etc/logrotate.d/syslog-ng"
